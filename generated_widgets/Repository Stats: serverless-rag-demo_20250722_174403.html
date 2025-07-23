@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Repository statistics for serverless-rag-demo showing stars and forks comparison">
+    <title>Repository Stats: serverless-rag-demo</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script src="https://cdn.tailwindcss.com" defer></script>
+</head>
+<body class="bg-gray-100 p-4">
+    <main class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6">
+        <h1 class="text-2xl font-bold mb-2 text-center">Repository Stats: serverless-rag-demo</h1>
+        <p class="text-center text-gray-600 mb-4">A comparison of stars and forks for the serverless-rag-demo repository</p>
+        
+        <div class="mb-4" role="img" aria-label="Bar chart showing repository statistics">
+            <canvas id="repoStatsChart"></canvas>
+        </div>
+
+        <div class="text-center text-sm text-gray-500">
+            Generated on: <time id="timestamp"></time>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set timestamp
+            const timestampElement = document.getElementById('timestamp');
+            timestampElement.textContent = new Date().toLocaleString();
+            timestampElement.setAttribute('datetime', new Date().toISOString());
+
+            // Chart data
+            const data = {
+                labels: ['Stars', 'Forks'],
+                datasets: [{
+                    data: [198, 59],
+                    backgroundColor: ['#4299E1', '#48BB78'],
+                    hoverBackgroundColor: ['#3182CE', '#38A169']
+                }]
+            };
+
+            // Chart configuration
+            const config = {
+                type: 'bar',
+                data: data,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Stars and Forks Comparison'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Count'
+                            }
+                        }
+                    }
+                }
+            };
+
+            // Create the chart
+            const ctx = document.getElementById('repoStatsChart').getContext('2d');
+            new Chart(ctx, config);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+{
+  "servers": {
+    
+    "mysql": {
+        "agent_type": "DATABASE_MCP_SERVER_AGENT",
+        "name": "MySQL MCP",
+        "url": "http://localhost:8000/sse",
+        "description": "Query the MySQL database",
+        "rules_prompt": "Always inspect the table schema before firing a query on the database."
+      },
+    
+    "opensearch": {
+        "agent_type": "DATABASE_MCP_SERVER_AGENT",
+        "name": "OpenSearch MCP",
+        "url": "http://localhost:8001/sse",
+        "description": "Query the OpenSearch database",
+        "rules_prompt": "1. First, inspect the index mappings to understand the structure of the data.\n2. Construct the query as a JSON object with the following structure:\n{\n    \"query\": \n        {   \n         \"... your query goes here\"\n         \n         },\n     \"size\": 100,\n}\n             \n3. Convert the JSON object to a string without escaping quotes.\n4. When passing this query to OpenSearch, pass this string as the query parameter.\n\nExample:\n query = json.dumps({\n     \"query\": {\n         \"match\": {\n             \"field_name\": \"search_term\"\n         }\n     },\n     \"size\": 100\n })\n\nRemember:\n- Use proper field names as per the index mapping.\n- Adjust the query type (match, term, range, etc.) based on your search requirements.\n- Set an appropriate size for the number of results you want.\n- Don't manually escape quotes in the JSON string."
+      },
+    
+    "github": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@smithery/cli@latest",
+        "run",
+        "@smithery-ai/github",
+        "--key",
+        "6216d495-7102-43e5-8c0a-78fa9fd91fad",
+        "--profile",
+        "appalling-monkey-qGwv4d"
+      ],
+      "agent_type": "GITHUB_MCP_SERVER_AGENT",
+      "name": "Github MCP",
+      "description": "Query Github pulic repositories",
+      "usage": "The github MCP should be used to access public repositories, user information on Github"
+    },
+
+    "browsermcp": {
+      "command": "npx",
+      "args": ["@browsermcp/mcp@latest"],
+      "agent_type": "Browser MCP Server Agent",
+      "name": "Browser MCP",
+      "description": "Control the browser",
+      "usage": "This MCP should be used when you want to access google, linkedin or anything on the web. You could use it to access the latest news on the web through google"
+    }
+  }
+}

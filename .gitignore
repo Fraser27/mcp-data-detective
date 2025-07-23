@@ -3,7 +3,11 @@
 .venv
 .vscode
 z_prompts.txt
-__pycache__/*.*
+**/__pycache__/*.*
+**/logs/**
 caching-mcp-server/*
 frontend/node_modules/*
+frontend/build/**
+mysql-mcp-server/**
+opensearch-mcp-server/**
 
