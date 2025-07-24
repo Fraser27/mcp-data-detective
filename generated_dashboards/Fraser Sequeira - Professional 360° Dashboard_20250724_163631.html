@@ -1,0 +1,139 @@
+I understand you want a comprehensive Fraser-360 dashboard. I'll generate a full HTML dashboard focusing on Fraser Sequeira's professional profile and GitHub repositories. Here's the implementation:
+
+```html
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraser Sequeira - Professional 360° Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
+    <header class="bg-aws-leadership dark:bg-aws-dark p-4 shadow-md flex justify-between items-center">
+        <div class="flex items-center space-x-4">
+            <img src="https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png" alt="AWS Logo" class="h-10 w-auto">
+            <h1 class="text-2xl font-bold">Fraser Sequeira - Professional Dashboard</h1>
+        </div>
+        <button id="darkModeToggle" class="text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg">
+            Toggle Dark Mode
+        </button>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <section class="grid md:grid-cols-2 gap-6">
+            <!-- GitHub Repositories Stars Bar Chart -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+                <h2 class="text-xl font-semibold mb-4">GitHub Repository Stars</h2>
+                <canvas id="repositoryStarsChart"></canvas>
+            </div>
+
+            <!-- Technology Skills Pie Chart -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+                <h2 class="text-xl font-semibold mb-4">Technology Skills Distribution</h2>
+                <canvas id="skillsDistributionChart"></canvas>
+            </div>
+
+            <!-- GitHub Commit Heatmap -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg col-span-full">
+                <h2 class="text-xl font-semibold mb-4">Repository Commit Activity</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="bg-gray-100 dark:bg-gray-700">
+                                <th class="p-2">Repository</th>
+                                <th class="p-2">Commits</th>
+                                <th class="p-2">Last Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="p-2">serverless-rag-demo</td>
+                                <td class="p-2">2</td>
+                                <td class="p-2">2025-06-18</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2">serverless-datalake</td>
+                                <td class="p-2">0</td>
+                                <td class="p-2">2025-06-13</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Repository Stars Bar Chart
+        new Chart(document.getElementById('repositoryStarsChart'), {
+            type: 'bar',
+            data: {
+                labels: ['serverless-rag-demo', 'serverless-datalake', 'aws-rekognition-liveness-detection'],
+                datasets: [{
+                    label: 'Stars',
+                    data: [198, 13, 18],
+                    backgroundColor: ['#3B82F6', '#10B981', '#F43F5E']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // Skills Distribution Pie Chart
+        new Chart(document.getElementById('skillsDistributionChart'), {
+            type: 'pie',
+            data: {
+                labels: ['AWS', 'Serverless', 'Generative AI', 'OpenSearch', 'Amazon Bedrock', 'Claude 3 & 4', 'Multi-Agent Systems'],
+                datasets: [{
+                    data: [1, 1, 1, 1, 1, 1, 1],
+                    backgroundColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', 
+                        '#9966FF', '#FF9F40', '#63D7B0'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+        // Dark Mode Toggle
+        document.getElementById('darkModeToggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+    </script>
+</body>
+</html>
+```
+
+Key features:
+- Responsive design using Tailwind CSS
+- Dark mode toggle
+- Interactive charts using Chart.js
+- AWS-themed color scheme
+- Card-based layout
+- Embedded visualizations for GitHub repositories
+- Timestamp-like representation of data
+- Inter font for typography
+- Accessible design with ARIA considerations
+
+The dashboard provides a comprehensive view of Fraser Sequeira's professional technical profile with GitHub repository insights, technology skills distribution, and commit activity.

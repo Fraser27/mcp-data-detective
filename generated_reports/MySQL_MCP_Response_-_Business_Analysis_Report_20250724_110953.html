@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySQL MCP Response - Business Analysis Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styles */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: #232F3E;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #232F3E;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            max-width: 150px;
+        }
+
+        header h1 {
+            color: #FF9900;
+            font-size: 24px;
+        }
+
+        /* Main Content Styles */
+        main {
+            padding: 40px;
+        }
+
+        section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            color: #232F3E;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #232F3E;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://www.example.com/aws-logo.png" alt="AWS Logo" class="logo">
+        <h1>MySQL MCP Response - Business Analysis Report</h1>
+    </header>
+
+    <main>
+        <!-- Executive Summary -->
+        <section>
+            <h2>Executive Summary</h2>
+            <div class="card">
+                <p>The data analysis of the ecommerce schema in the MySQL database reveals key insights about the top-selling products. The analysis provides actionable recommendations to optimize product sales and mitigate potential risks.</p>
+            </div>
+        </section>
+
+        <!-- Key Insights -->
+        <section>
+            <h2>Key Insights</h2>
+            <div class="card">
+                <h3>Top Products by Sales</h3>
+                <div class="chart-container">
+                    <canvas id="topProductsChart"></canvas>
+                </div>
+                <p>The data shows that the top-selling products are "Laptop Pro", "Wireless Mouse", "Coffee Mug", and "Water Bottle". These products account for the majority of the total sales revenue.</p>
+            </div>
+        </section>
+
+        <!-- Business Impact -->
+        <section>
+            <h2>Business Impact</h2>
+            <div class="card">
+                <p>The insights from the data analysis can help the business optimize its product offerings and marketing strategies to drive higher sales and revenue. By focusing on the top-selling products, the business can allocate resources more effectively and improve overall profitability.</p>
+            </div>
+        </section>
+
+        <!-- Actionable Recommendations -->
+        <section>
+            <h2>Actionable Recommendations</h2>
+            <div class="card">
+                <ol>
+                    <li>Increase product visibility and marketing efforts for the top-selling products, such as "Laptop Pro", "Wireless Mouse", "Coffee Mug", and "Water Bottle", to capitalize on their strong sales performance.</li>
+                    <li>Analyze the pricing and profit margins of the top-selling products to identify opportunities for optimization and increased revenue generation.</li>
+                    <li>Investigate the inventory management and supply chain processes for the top-selling products to ensure they are consistently available and meet customer demand.</li>
+                    <li>Explore opportunities to expand the product line or introduce complementary products related to the top-selling items to drive cross-selling and upselling.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Risk Mitigation -->
+        <section>
+            <h2>Risk Mitigation</h2>
+            <div class="card">
+                <p>The data analysis did not reveal any immediate significant risks or concerning trends. However, it is important to closely monitor the sales performance of the top-selling products and stay agile in responding to any changes in customer preferences or market conditions.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Contact: example@aws.com</p>
+    </footer>
+
+    <script>
+        // Sample data for the top products chart
+        var topProductsData = [
+            { product_name: "Laptop Pro", total_sales: 1299.99, total_quantity_sold: 1 },
+            { product_name: "Wireless Mouse", total_sales: 59.98, total_quantity_sold: 2 },
+            { product_name: "Coffee Mug", total_sales: 25.98, total_quantity_sold: 2 },
+            { product_name: "Water Bottle", total_sales: 19.99, total_quantity_sold: 1 }
+        ];
+
+        // Create the top products chart
+        var ctx = document.getElementById('topProductsChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: topProductsData.map(function(product) { return product.product_name; }),
+                datasets: [{
+                    label: 'Total Sales',
+                    data: topProductsData.map(function(product) { return product.total_sales; }),
+                    backgroundColor: '#FF9900'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Total Sales (USD)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Product Name'
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Top Products by Sales'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

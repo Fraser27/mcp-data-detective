@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Repository Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .animate-spin {
+            animation: spin 2s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <header class="flex items-center justify-between mb-8">
+            <div class="flex items-center">
+                <svg class="w-12 h-12 text-blue-500 animate-spin mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                </svg>
+                <h1 class="text-3xl font-bold text-gray-800">GitHub Repository Dashboard</h1>
+            </div>
+            <button id="downloadBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Download Dashboard
+            </button>
+        </header>
+        <p class="text-gray-600 mb-8">A comprehensive overview of the serverless-rag-demo repository's committer details, clones, forks, and stars</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Repository Information</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full table-auto">
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="py-2 px-4 font-medium">Repository Name</td>
+                                <td class="py-2 px-4">serverless-rag-demo</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-2 px-4 font-medium">Organization</td>
+                                <td class="py-2 px-4">aws-samples</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-2 px-4 font-medium">Description</td>
+                                <td class="py-2 px-4">Amazon Bedrock Foundation models with Amazon Opensearch Serverless as a Vector DB</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-2 px-4 font-medium">Primary Language</td>
+                                <td class="py-2 px-4">Python</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-2 px-4 font-medium">Stars</td>
+                                <td class="py-2 px-4">198</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-2 px-4 font-medium">Forks</td>
+                                <td class="py-2 px-4">59</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-2 px-4 font-medium">License</td>
+                                <td class="py-2 px-4">MIT-0</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 font-medium">Main Purpose</td>
+                                <td class="py-2 px-4">Scalable RAG solutions/Agentic Workflows with Amazon Bedrock and Amazon Opensearch serverless service</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Key Features Distribution</h2>
+                <canvas id="featuresChart"></canvas>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Commit Activity Trends</h2>
+                <canvas id="commitTrendsChart"></canvas>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Monthly Commit Comparison</h2>
+                <canvas id="monthlyCommitsChart"></canvas>
+            </div>
+        </div>
+        
+        <footer class="mt-8 text-center text-gray-600">
+            <p>Dashboard generated on: <span id="timestamp"></span></p>
+        </footer>
+    </div>
+
+    <script>
+        // Features Pie Chart
+        const featuresCtx = document.getElementById('featuresChart').getContext('2d');
+        new Chart(featuresCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Document chat', 'Multi-Agent collaboration', 'Sentiment Analysis', 'PII Redaction', 'OCR'],
+                datasets: [{
+                    data: [1, 1, 1, 1, 1],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.8)',
+                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(255, 206, 86, 0.8)',
+                        'rgba(75, 192, 192, 0.8)',
+                        'rgba(153, 102, 255, 0.8)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Key Features Distribution'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + ' (20%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Commit Trends Line Chart
+        const commitTrendsCtx = document.getElementById('commitTrendsChart').getContext('2d');
+        new Chart(commitTrendsCtx, {
+            type: 'line',
+            data: {
+                labels: ['2024-07', '2024-08', '2024-09', '2024-10', '2024-11', '2024-12', '2025-04', '2025-05', '2025-06'],
+                datasets: [{
+                    label: 'Number of Commits',
+                    data: [42, 6, 3, 4, 4, 2, 3, 20, 16],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Commit Activity Trends'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Monthly Commits Bar Chart
+        const monthlyCommitsCtx = document.getElementById('monthlyCommitsChart').getContext('2d');
+        new Chart(monthlyCommitsCtx, {
+            type: 'bar',
+            data: {
+                labels: ['2024-07', '2024-08', '2024-09', '2024-10', '2024-11', '2024-12', '2025-04', '2025-05', '2025-06'],
+                datasets: [{
+                    label: 'Number of Commits',
+                    data: [42, 6, 3, 4, 4, 2, 3, 20, 16],
+                    backgroundColor: 'rgba(54, 162, 235, 0.8)'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Monthly Commit Comparison'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Set timestamp
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+
+        // Download functionality
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'github-repo-dashboard.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>

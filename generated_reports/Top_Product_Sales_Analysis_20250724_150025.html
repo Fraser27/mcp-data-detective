@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Product Sales Analysis</title>
+    <style>
+        /* CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Global Styles */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #232F3E;
+        }
+        
+        header {
+            background-color: #FF9900;
+            padding: 10px;
+            text-align: left;
+            font-size: 14px;
+            color: #fff;
+        }
+        
+        .logo {
+            height: 20px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        
+        main {
+            padding: 20px;
+        }
+        
+        section {
+            margin-bottom: 40px;
+        }
+        
+        h1, h2, h3 {
+            margin-bottom: 20px;
+        }
+        
+        .card {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chart-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        footer {
+            background-color: #232F3E;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <img src="https://aws.amazon.com/favicon.ico" alt="AWS Logo" class="logo">
+        Powered by AWS
+    </header>
+    
+    <main>
+        <section>
+            <h1>Top Product Sales Analysis</h1>
+            <div class="card">
+                <h2>Executive Summary</h2>
+                <p>The analysis of the top products by sales reveals that the Laptop Pro is the clear market leader, generating over $1,299.99 in total sales. The Wireless Mouse, Coffee Mug, and Water Bottle also show promising sales, with $59.98, $25.98, and $19.99 in total sales, respectively.</p>
+            </div>
+        </section>
+        
+        <section>
+            <h2>Key Insights</h2>
+            <div class="card">
+                <h3>Top Products by Sales</h3>
+                <div class="chart-container">
+                    <canvas id="topProductsChart"></canvas>
+                </div>
+                <p>The data shows that the Laptop Pro is the best-selling product, followed by the Wireless Mouse, Coffee Mug, and Water Bottle. This indicates a strong demand for high-end electronics and a potential opportunity in the office supplies category.</p>
+            </div>
+        </section>
+        
+        <section>
+            <h2>Business Impact</h2>
+            <div class="card">
+                <h3>Revenue Potential</h3>
+                <p>The Laptop Pro, being the top-selling product, has the highest revenue potential. Focusing on marketing and sales strategies to further promote this product could lead to significant revenue growth.</p>
+                <h3>Diversification Opportunities</h3>
+                <p>The strong performance of the Wireless Mouse, Coffee Mug, and Water Bottle suggests potential opportunities for product line expansion and diversification in the office supplies category. Exploring new product developments or partnerships in this segment could help the business capture a larger market share.</p>
+            </div>
+        </section>
+        
+        <section>
+            <h2>Immediate Action Items</h2>
+            <div class="card">
+                <ol>
+                    <li>Increase marketing and promotional efforts for the Laptop Pro to capitalize on its market-leading position and drive further sales growth.</li>
+                    <li>Investigate opportunities for new product development or strategic partnerships in the office supplies category to expand the product portfolio and diversify the revenue stream.</li>
+                    <li>Closely monitor sales trends and customer feedback to identify any emerging market shifts or changing consumer preferences that could impact the business.</li>
+                </ol>
+            </div>
+        </section>
+        
+        <section>
+            <h2>Risk Mitigation</h2>
+            <div class="card">
+                <p>While the current data shows a strong performance for the top products, the business should be prepared for potential risks, such as increased competition, changes in customer preferences, or supply chain disruptions. Ongoing market monitoring, customer research, and contingency planning will be crucial to mitigate these risks and ensure the continued growth and success of the business.</p>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        &copy; 2023 Business Analysis Report. All rights reserved.
+    </footer>
+    
+    <script>
+        // Sample data for the top products chart
+        const topProductData = [
+            { product_id: 1, product_name: "Laptop Pro", category: "Electronics", total_sales: 1299.99 },
+            { product_id: 2, product_name: "Wireless Mouse", category: "Electronics", total_sales: 59.98 },
+            { product_id: 4, product_name: "Coffee Mug", category: "Office Supplies", total_sales: 25.98 },
+            { product_id: 8, product_name: "Water Bottle", category: "Office Supplies", total_sales: 19.99 }
+        ];
+
+        // Create the top products chart
+        const ctx = document.getElementById('topProductsChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: topProductData.map(product => product.product_name),
+                datasets: [{
+                    label: 'Total Sales',
+                    data: topProductData.map(product => product.total_sales),
+                    backgroundColor: '#FF9900',
+                    borderColor: '#232F3E',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toFixed(2);
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Top Products by Sales'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

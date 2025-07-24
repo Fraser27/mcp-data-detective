@@ -146,8 +146,19 @@ const Dashboard = () => {
         if (!response.ok) throw new Error('Failed to fetch widgets');
         
         const data = await response.json();
-        if (data.dashboards && Array.isArray(data.dashboards)) {
+        console.log('Widget history response:', data);
+        if (data.widgets && Array.isArray(data.widgets)) {
           // Transform the API response into widget objects
+          const widgetObjects = data.widgets.map(widget => ({
+            id: widget.filename,
+            path: `/api/widget/${widget.filename}`,
+            title: widget.filename.replace('.html', ''),
+            created_at: widget.created_at,
+            metadata: {"generated_at": widget.created_at}
+          }));
+          setWidgets(widgetObjects);
+        } else if (data.dashboards && Array.isArray(data.dashboards)) {
+          // Fallback for backward compatibility
           const widgetObjects = data.dashboards.map(widget => ({
             id: widget.filename,
             path: `/api/widget/${widget.filename}`,
@@ -267,12 +278,24 @@ const Dashboard = () => {
       if (!response.ok) throw new Error('Failed to fetch widgets');
       
       const data = await response.json();
-      if (data.dashboards && Array.isArray(data.dashboards)) {
+      console.log('Refresh widgets response:', data);
+      if (data.widgets && Array.isArray(data.widgets)) {
+        const widgetObjects = data.widgets.map(widget => ({
+          id: widget.filename,
+          path: `/api/widget/${widget.filename}`,
+          title: widget.filename.replace('.html', ''),
+          created_at: widget.created_at,
+          metadata: {"generated_at": widget.created_at}
+        }));
+        setWidgets(widgetObjects);
+      } else if (data.dashboards && Array.isArray(data.dashboards)) {
+        // Fallback for backward compatibility
         const widgetObjects = data.dashboards.map(widget => ({
           id: widget.filename,
           path: `/api/widget/${widget.filename}`,
           title: widget.filename.replace('.html', ''),
-          created_at: widget.created_at
+          created_at: widget.created_at,
+          metadata: {"generated_at": widget.created_at}
         }));
         setWidgets(widgetObjects);
       }
@@ -473,21 +496,27 @@ const Dashboard = () => {
   return (
     <div className="p-4 relative">
       <div className="mb-6">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-2xl font-bold">Dashboard</h1>
+        <div className="flex justify-between items-center mb-4 bg-detective-800 p-4 rounded-lg shadow-lg">
+          <div className="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-detective-accent mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="10" cy="10" r="7" />
+              <line x1="21" y1="21" x2="15" y2="15" />
+            </svg>
+            <h1 className="text-2xl font-bold text-white">Evidence Dashboard</h1>
+          </div>
           <div className="flex space-x-2">
             <button
               onClick={refreshWidgets}
-              className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm flex items-center"
+              className="bg-detective-accent hover:bg-detective-accent/90 text-detective-900 px-3 py-1 rounded text-sm flex items-center shadow-sm"
               disabled={isLoadingWidgets}
             >
               {isLoadingWidgets ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin mr-1" />
-                  <span>Loading...</span>
+                  <span>Investigating...</span>
                 </>
               ) : (
-                <span>Refresh Widgets</span>
+                <span>Refresh Evidence</span>
               )}
             </button>
           </div>
@@ -496,7 +525,7 @@ const Dashboard = () => {
         {/* Chat Panel Toggle Button */}
         <button
           onClick={toggleChatPanel}
-          className="fixed bottom-6 right-6 bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-full shadow-lg z-10 flex items-center justify-center"
+          className="fixed bottom-6 right-6 bg-detective-800 hover:bg-detective-700 text-detective-accent p-3 rounded-full shadow-lg z-10 flex items-center justify-center border-2 border-detective-accent"
         >
           {showChatPanel ? <X size={20} /> : <MessageSquare size={20} />}
         </button>
@@ -509,7 +538,7 @@ const Dashboard = () => {
       )}
       
       {/* 4x4 Grid Layout for Widgets */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
         {widgets.map(widget => (
           <div key={widget.id} className="bg-white rounded-lg shadow-md overflow-hidden">
             <div className="flex justify-between items-center p-3 border-b">
@@ -543,25 +572,36 @@ const Dashboard = () => {
       
       {/* Empty state */}
       {widgets.length === 0 && !isLoadingWidgets && !isLoading && (
-        <div className="text-center py-12 bg-gray-50 rounded-lg">
-          <p className="text-gray-500">No widgets available. Create one using the chat assistant.</p>
+        <div className="text-center py-12 bg-detective-100 rounded-lg border border-detective-200 shadow-inner">
+          <div className="flex flex-col items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-detective-accent mb-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="10" cy="10" r="7" />
+              <line x1="21" y1="21" x2="15" y2="15" />
+            </svg>
+            <h3 className="text-lg font-bold text-detective-700 mb-2">No Evidence Collected Yet</h3>
+            <p className="text-detective-600 max-w-md">Start your investigation by asking the Data Detective to create visualizations of your data.</p>
+          </div>
         </div>
       )}
       
       {/* Chat Panel */}
       <div className={`fixed right-0 top-0 h-full bg-white shadow-lg w-96 transition-transform duration-300 transform z-20 ${showChatPanel ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="flex flex-col h-full">
-          <div className="p-4 border-b flex justify-between items-center bg-blue-500 text-white">
+          <div className="p-4 border-b flex justify-between items-center bg-detective-800 text-white">
             <h3 className="font-semibold flex items-center">
-              <Bot className="mr-2" size={18} /> Widget Assistant
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-detective-accent mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="10" cy="10" r="7" />
+                <line x1="21" y1="21" x2="15" y2="15" />
+              </svg>
+              <span>Detective Assistant</span>
             </h3>
             <div className="flex items-center space-x-2">
               <button 
                 onClick={clearChat} 
-                className="text-white hover:text-gray-200 text-xs bg-blue-600 px-2 py-1 rounded"
+                className="text-detective-900 hover:text-detective-800 text-xs bg-detective-accent px-2 py-1 rounded shadow-sm"
                 title="Clear chat history"
               >
-                Clear Chat
+                Clear Case
               </button>
               <button onClick={toggleChatPanel} className="text-white hover:text-gray-200">
                 <X size={18} />
@@ -582,19 +622,19 @@ const Dashboard = () => {
           </div>
           
           {/* Sample Questions */}
-          <div className="p-3 border-t bg-gray-50">
-            <p className="text-xs text-gray-500 mb-2">Try asking:</p>
+          <div className="p-3 border-t bg-detective-100">
+            <p className="text-xs text-detective-600 mb-2 font-medium">Investigation Leads:</p>
             <div className="space-y-2">
               {[
-                "Create a pie chart showing MySQL user distribution",
-                "Show me a bar chart of cache performance",
-                "Make a table of the top database queries",
-                "Create a line chart of API response times"
+                "Investigate MySQL user distribution with a pie chart",
+                "Analyze cache performance patterns over time",
+                "Compile evidence of the top database queries",
+                "Track suspicious API response time patterns"
               ].map((question, index) => (
                 <button
                   key={index}
                   onClick={() => setChatMessage(question)}
-                  className="text-xs text-left w-full p-2 bg-white border border-gray-200 rounded hover:bg-blue-50 hover:border-blue-200 transition-colors"
+                  className="text-xs text-left w-full p-2 bg-white border border-detective-200 rounded hover:bg-detective-50 hover:border-detective-accent transition-colors shadow-sm"
                 >
                   {question}
                 </button>
@@ -603,20 +643,20 @@ const Dashboard = () => {
           </div>
           
           {/* Chat Input */}
-          <div className="p-3 border-t">
+          <div className="p-3 border-t bg-detective-800">
             <form onSubmit={handleChatSubmit} className="flex">
               <input
                 type="text"
                 value={chatMessage}
                 onChange={(e) => setChatMessage(e.target.value)}
-                placeholder="Ask about creating widgets..."
-                className="flex-grow px-3 py-2 text-sm border rounded-l focus:outline-none focus:ring-1 focus:ring-blue-500"
+                placeholder="Describe what evidence you need..."
+                className="flex-grow px-3 py-2 text-sm border border-detective-600 bg-detective-700 text-white rounded-l focus:outline-none focus:ring-1 focus:ring-detective-accent placeholder-gray-400"
                 disabled={isLoading}
               />
               <button
                 type="submit"
                 disabled={isLoading}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-r disabled:opacity-50 flex items-center justify-center"
+                className="bg-detective-accent hover:bg-detective-accent/90 text-detective-900 px-3 py-2 rounded-r disabled:opacity-50 flex items-center justify-center"
               >
                 {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send size={16} />}
               </button>

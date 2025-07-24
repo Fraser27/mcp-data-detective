@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, FileText, Loader2, ChevronDown } from 'lucide-react';
 import axios from 'axios';
 
-function DashboardHistory() {
+function ReportHistory() {
   const [dashboards, setDashboards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,8 +16,8 @@ function DashboardHistory() {
 
   const fetchDashboards = async () => {
     try {
-      const response = await axios.get('/api/dashboards/history');
-      setDashboards(response.data.dashboards);
+      const response = await axios.get('/api/reports/history');
+      setDashboards(response.data.reports);
     } catch (err) {
       setError('Failed to load dashboard history');
     } finally {
@@ -28,7 +28,7 @@ function DashboardHistory() {
   const loadDashboard = async (filename) => {
     try {
       setSelectedDashboard(filename);
-      const response = await axios.get(`/api/dashboard/${filename}`);
+      const response = await axios.get(`/api/report/${filename}`);
       setDashboardContent(response.data);
     } catch (err) {
       setError('Failed to load dashboard');
@@ -47,7 +47,7 @@ function DashboardHistory() {
     return (
       <div className="flex items-center justify-center h-64">
         <Loader2 className="h-8 w-8 animate-spin" />
-        <span className="ml-2">Loading dashboard history...</span>
+        <span className="ml-2">Loading report history...</span>
       </div>
     );
   }
@@ -67,14 +67,14 @@ function DashboardHistory() {
           <circle cx="10" cy="10" r="7" />
           <line x1="21" y1="21" x2="15" y2="15" />
         </svg>
-        <h1 className="text-2xl font-bold text-white">Case File Archives</h1>
+        <h1 className="text-2xl font-bold text-white">Investigation Reports</h1>
       </div>
       
       {/* Dashboard Dropdown */}
       <div className="mb-6">
-        <h2 className="text-lg font-semibold mb-2">Select Dashboard</h2>
+        <h2 className="text-lg font-semibold mb-2">Select Report</h2>
         {dashboards.length === 0 ? (
-          <p className="text-gray-500">No dashboards generated yet.</p>
+          <p className="text-gray-500">No Reports generated yet.</p>
         ) : (
           <div className="relative">
             <div 
@@ -122,7 +122,7 @@ function DashboardHistory() {
       <div className="w-full">
           {selectedDashboard ? (
             <div>
-              <h2 className="text-lg font-semibold mb-4">Dashboard Preview</h2>
+              <h2 className="text-lg font-semibold mb-4">Report Preview</h2>
               <iframe
                 srcDoc={dashboardContent}
                 title="Dashboard Preview"
@@ -133,7 +133,7 @@ function DashboardHistory() {
             </div>
           ) : (
             <div className="flex items-center justify-center h-64 border border-gray-200 rounded-lg bg-gray-50">
-              <p className="text-gray-500">Select a dashboard to preview</p>
+              <p className="text-gray-500">Select a report to preview</p>
             </div>
           )}
         </div>
@@ -141,4 +141,4 @@ function DashboardHistory() {
   );
 }
 
-export default DashboardHistory;
+export default ReportHistory;

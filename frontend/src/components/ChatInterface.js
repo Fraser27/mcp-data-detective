@@ -7,6 +7,8 @@ import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import ChatMessage from './ChatMessage';
 import ConnectionStatus from './ConnectionStatus';
 import TabSessionIndicator from './TabSessionIndicator';
+import SherlockAvatar from './SherlockAvatar';
+import CaseFileText from './CaseFileText';
 
 function ChatInterface() {
   const { 
@@ -80,33 +82,38 @@ function ChatInterface() {
   };
 
   const exampleQueries = [
-    "List all tables in the MySQL database",
-    "Show me a sample of data from the users table",
-    "How many rows are in the products table in MySQL?",
-    "Go to google and search for latest news",
-    "Get a summary of the MySQL database",
-    "Create a chart showing user registration trends",
-    "What are the top 10 products by sales?",
-    "Tell me about serverless-rag-demo repo in aws-samples org on Github"
+    "Investigate all tables in the MySQL database",
+    "Which devices are currently online ?",
+    "Give me a status report on dispensers across all sites",
+    "How many records are in the products table? I need evidence.",
+    "Give me all data points on serverless-rag-demo repo under aws-samples org on Github",
+    "Create a detailed report of the MySQL database structure",
+    "What are the top 10 products by sales? Look for anomalies.",
+    "Analyze the connection between users and their purchase history"
   ];
 
   return (
-    <div className="flex flex-col h-full bg-gray-50">
+    <div className="flex flex-col h-full bg-detective-paper bg-detective-pattern">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="detective-header px-3 py-1">
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">MCP Data Detective</h1>
-            <p className="text-sm text-gray-600">
-              Analyze multiple data sources. Find hidden insights.
-            </p>
+          <div className="flex items-center">
+            <div className="mr-3 text-detective-accent">
+              <SherlockAvatar className="h-10 w-10" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-white">MCP Data Detective</h1>
+              <p className="text-sm text-gray-300">
+                Analyze multiple data sources. Uncover hidden insights.
+              </p>
+            </div>
           </div>
           <div className="flex items-center space-x-4">
             <TabSessionIndicator />
             <ConnectionStatus isConnected={isConnected} />
             <button
               onClick={handleClearChat}
-              className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+              className="flex items-center px-3 py-2 text-sm font-medium text-detective-900 bg-detective-accent border border-detective-accent/50 rounded-md hover:bg-detective-accent/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-detective-accent"
             >
               <Trash2 className="h-4 w-4 mr-2" />
               Clear Chat
@@ -116,19 +123,16 @@ function ChatInterface() {
       </div>
 
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto p-6 bg-detective-paper/80">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center">
-            <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mb-4">
-              <Bot className="h-8 w-8 text-primary-600" />
+            <div className="w-20 h-20 bg-detective-accent/20 rounded-full flex items-center justify-center mb-4">
+              <SherlockAvatar className="h-14 w-14 text-detective-accent" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              Welcome to Data Detective!
+            <h3 className="text-lg font-bold text-detective-800 mb-2">
+              Welcome to the MCP Data Detective Agency!
             </h3>
-            <p className="text-gray-600 mb-6 max-w-md">
-              All you need is English. I can help you query all your databases, analyze data, and create dashboards. 
-              Try asking me a question about your data.
-            </p>
+            <CaseFileText />
             
             {/* Example Queries */}
             <div className="w-full max-w-2xl">
@@ -138,7 +142,7 @@ function ChatInterface() {
                   <button
                     key={index}
                     onClick={() => setInputValue(query)}
-                    className="text-left p-3 text-sm text-gray-600 bg-white border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors"
+                    className="text-left p-3 text-sm text-detective-600 bg-white border border-gray-200 rounded-lg hover:border-detective-accent hover:bg-detective-50 transition-colors"
                   >
                     {query}
                   </button>
@@ -160,9 +164,9 @@ function ChatInterface() {
             
             {/* Typing indicator */}
             {isTyping && (
-              <div className="flex items-center space-x-2 p-4 bg-white border border-gray-200 rounded-lg shadow-sm">
-                <Loader2 className="h-5 w-5 text-primary-500 animate-spin" />
-                <span className="text-gray-600">Processing your request...</span>
+              <div className="flex items-center space-x-2 p-4 bg-white/90 border border-detective-accent/30 rounded-lg shadow-detective">
+                <Loader2 className="h-5 w-5 text-detective-accent animate-spin" />
+                <span className="text-detective-600">Investigating your request...</span>
               </div>
             )}
             
@@ -172,16 +176,16 @@ function ChatInterface() {
       </div>
 
       {/* Input Area */}
-      <div className="bg-white border-t border-gray-200 p-6">
-        <form onSubmit={handleSubmit} className="flex space-x-4">
+      <div className="bg-detective-800 border-t border-detective-700 p-3">
+        <form onSubmit={handleSubmit} className="flex space-x-2">
           <div className="flex-1">
             <textarea
               ref={inputRef}
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Ask me about your database, create dashboards, or analyze data..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
+              placeholder="Describe your investigation or what evidence you're looking for..."
+              className="w-full px-4 py-3 border border-detective-600 bg-detective-700 text-white rounded-lg focus:ring-2 focus:ring-detective-accent focus:border-detective-accent resize-none placeholder-gray-400"
               rows="1"
               disabled={isLoading || !isConnected}
               style={{ minHeight: '48px', maxHeight: '120px' }}
@@ -190,7 +194,7 @@ function ChatInterface() {
           <button
             type="submit"
             disabled={!inputValue.trim() || isLoading || !isConnected}
-            className="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="px-6 py-3 bg-detective-accent text-detective-900 rounded-lg hover:bg-detective-accent/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-detective-accent disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {isLoading ? (
               <Loader2 className="h-5 w-5 animate-spin" />

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySQL User Distribution Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .animate-spin {
+            animation: spin 2s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <header class="flex items-center justify-between mb-8">
+            <div class="flex items-center">
+                <svg class="w-10 h-10 text-blue-500 animate-spin mr-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <h1 class="text-2xl font-bold">MySQL User Distribution Dashboard</h1>
+            </div>
+            <button id="downloadBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Download Dashboard
+            </button>
+        </header>
+        <p class="text-gray-600 mb-4">A visual representation of active and inactive MySQL users.</p>
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">MySQL User Distribution</h2>
+            <div class="flex justify-center">
+                <canvas id="userDistributionChart" width="400" height="400"></canvas>
+            </div>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">User Distribution Details</h2>
+            <table class="w-full">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="p-2 text-left">User Type</th>
+                        <th class="p-2 text-left">Count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="p-2">Active Users</td>
+                        <td class="p-2">5</td>
+                    </tr>
+                    <tr>
+                        <td class="p-2">Inactive Users</td>
+                        <td class="p-2">0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <footer class="text-center text-gray-500">
+            <p>Dashboard generated on: <span id="timestamp"></span></p>
+        </footer>
+    </div>
+
+    <script>
+        // Pie Chart
+        const ctx = document.getElementById('userDistributionChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Active Users', 'Inactive Users'],
+                datasets: [{
+                    data: [5, 0],
+                    backgroundColor: ['#4CAF50', '#F44336'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'MySQL User Distribution'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    label += context.parsed;
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Set timestamp
+        const timestamp = new Date().toLocaleString();
+        document.getElementById('timestamp').textContent = timestamp;
+
+        // Download functionality
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            const html = document.documentElement.outerHTML;
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'mysql_user_distribution_dashboard.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraser Sequeira - Professional 360° Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* CSS styles */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #232F3E;
+            color: #ffffff;
+            padding: 10px;
+        }
+        .logo {
+            height: 20px;
+            float: left;
+            margin-right: 10px;
+        }
+        h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .card {
+            background-color: #f1f1f1;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #232F3E;
+        }
+        .chart-container {
+            width: 100%;
+            height: 400px;
+        }
+        .repository-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .repository-list li {
+            margin-bottom: 10px;
+        }
+        .repository-list h3 {
+            color: #232F3E;
+            margin-bottom: 5px;
+        }
+        .repository-list p {
+            margin: 0;
+        }
+        footer {
+            background-color: #232F3E;
+            color: #ffffff;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://aws.amazon.com/images/AWS_logo_PMS_Gradient.jpg" alt="AWS Logo" class="logo">
+        <h1>Fraser Sequeira - Professional 360° Dashboard</h1>
+    </header>
+
+    <main>
+        <div class="card">
+            <h2>Executive Summary</h2>
+            <p>Fraser Sequeira is a Startup Solutions Architect at Amazon Web Services (AWS) with a strong focus on data engineering, serverless architecture, generative AI, and multi-agent systems. He has an active GitHub presence, contributing to several open-source projects related to these technologies, and has been a speaker at various AWS events.</p>
+        </div>
+
+        <div class="card">
+            <h2>Key Insights</h2>
+            <div class="chart-container">
+                <canvas id="technologyDistributionChart"></canvas>
+            </div>
+            <h3>Professional Profile</h3>
+            <p>Fraser Sequeira's professional profile highlights his expertise in the following areas:</p>
+            <ul>
+                <li>Data Engineering</li>
+                <li>Serverless Architecture</li>
+                <li>Generative AI</li>
+                <li>Multi-Agent Systems</li>
+            </ul>
+            <h3>GitHub Repositories</h3>
+            <p>Fraser has contributed to several AWS-related open-source projects, including:</p>
+            <ul class="repository-list">
+                <li>
+                    <h3>serverless-rag-demo</h3>
+                    <p>A project that demonstrates the use of Amazon Bedrock Foundation models with Amazon OpenSearch Serverless as a Vector DB for building scalable and serverless RAG workflows.</p>
+                </li>
+                <li>
+                    <h3>serverless-datalake</h3>
+                    <p>A project that showcases a serverless data lake architecture.</p>
+                </li>
+                <li>
+                    <h3>aws-rekognition-liveness-detection</h3>
+                    <p>A project that demonstrates the use of Amazon Rekognition for liveness detection.</p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Actionable Recommendations</h2>
+            <p>Based on the insights gathered, the following recommendations are suggested:</p>
+            <ol>
+                <li>Leverage Fraser Sequeira's expertise in serverless architecture, generative AI, and multi-agent systems to explore new business opportunities and drive innovation.</li>
+                <li>Invite Fraser to speak at internal tech events or webinars to share his knowledge and experience with the broader team.</li>
+                <li>Consider incorporating Fraser's open-source contributions into the company's technology stack or collaborating with him on future projects.</li>
+            </ol>
+        </div>
+
+        <div class="card">
+            <h2>Risk Assessment</h2>
+            <p>The analysis of Fraser Sequeira's profile and contributions did not reveal any significant risks or concerns. His strong expertise and active involvement in the AWS and open-source communities suggest that he is a valuable asset to the company.</p>
+        </div>
+    </main>
+
+    <footer>
+        Powered by AWS | Contact: example@company.com
+    </footer>
+
+    <script>
+        // Sample data for chart
+        const technologyDistributionData = {
+            labels: ['AWS', 'Serverless Architecture', 'Generative AI', 'OpenSearch', 'Amazon Bedrock', 'Claude 3 & 4', 'Multi-Agent Systems'],
+            datasets: [{
+                label: 'Technology Distribution',
+                data: [1, 1, 1, 1, 1, 1, 1],
+                backgroundColor: ['#FF9900', '#232F3E', '#FF9900', '#232F3E', '#FF9900', '#232F3E', '#FF9900']
+            }]
+        };
+
+        // Create the chart
+        const ctx = document.getElementById('technologyDistributionChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: technologyDistributionData,
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Key Technologies'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repository Metrics Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+</head>
+<body class="bg-gray-100 p-4">
+    <div class="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-3xl font-bold mb-2 text-center text-gray-800">Repository Metrics Dashboard</h1>
+        <p class="text-center text-gray-600 mb-6">Overview of serverless-rag-demo repository statistics and top contributor</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-4 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">Repository Popularity Metrics</h2>
+                <canvas id="popularityChart"></canvas>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">Repository Details</h2>
+                <table class="w-full">
+                    <tbody>
+                        <tr>
+                            <td class="py-2 font-semibold">Stars</td>
+                            <td class="py-2">198</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-semibold">Forks</td>
+                            <td class="py-2">59</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-semibold">Language</td>
+                            <td class="py-2">Python</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-semibold">License</td>
+                            <td class="py-2">MIT-0</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-semibold">Top Committers</td>
+                            <td class="py-2">Fraser Sequeira and fraseque</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-semibold">Recent Activity</td>
+                            <td class="py-2">Active (as of 6/18/2025)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="mt-6 text-center">
+            <button id="exportBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Export as PNG
+            </button>
+        </div>
+        
+        <p class="text-center text-gray-500 mt-6">
+            Dashboard generated on: <span id="timestamp"></span>
+        </p>
+    </div>
+
+    <script>
+        // Popularity Chart
+        const ctx = document.getElementById('popularityChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Stars', 'Forks'],
+                datasets: [{
+                    label: 'Count',
+                    data: [198, 59],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.8)',
+                        'rgba(54, 162, 235, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.formattedValue}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Export functionality
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            html2canvas(document.body).then(function(canvas) {
+                const link = document.createElement('a');
+                link.download = 'repository-metrics-dashboard.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        });
+
+        // Set timestamp
+        const now = new Date();
+        document.getElementById('timestamp').textContent = now.toLocaleString();
+    </script>
+</body>
+</html>

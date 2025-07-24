@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySQL User Distribution Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* CSS styles */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #232F3E;
+            color: #ffffff;
+            padding: 10px;
+        }
+        .logo {
+            height: 20px;
+            float: left;
+            margin-right: 10px;
+        }
+        h1 {
+            margin: 0;
+            font-size: 20px;
+        }
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .card {
+            background-color: #f1f1f1;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #232F3E;
+        }
+        .chart-container {
+            width: 100%;
+            height: 400px;
+        }
+        footer {
+            background-color: #232F3E;
+            color: #ffffff;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://aws.amazon.com/images/AWS_logo_PMS_Gradient.jpg" alt="AWS Logo" class="logo">
+        <h1>MySQL User Distribution Analysis</h1>
+    </header>
+
+    <main>
+        <div class="card">
+            <h2>Executive Summary</h2>
+            <p>The analysis of the MySQL database reveals a small user base with 5 active users, all of whom have complete profiles. This suggests a limited user engagement in the current system.</p>
+        </div>
+
+        <div class="card">
+            <h2>Key Insights</h2>
+            <div class="chart-container">
+                <canvas id="userDistributionChart"></canvas>
+            </div>
+            <p>The key insights from the data analysis are:</p>
+            <ul>
+                <li>Total users in the database: 5</li>
+                <li>All users are active (100%)</li>
+                <li>All users have complete profiles</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Actionable Recommendations</h2>
+            <p>Based on the analysis, the following recommendations are suggested:</p>
+            <ol>
+                <li>Implement targeted marketing campaigns to attract new users and expand the user base.</li>
+                <li>Invest in user engagement strategies to increase user activity and retention.</li>
+                <li>Explore opportunities to integrate the platform with relevant partners or channels to reach a wider audience.</li>
+            </ol>
+        </div>
+
+        <div class="card">
+            <h2>Risk Assessment</h2>
+            <p>The small user base and lack of user growth suggest the following risks:</p>
+            <ul>
+                <li>Limited revenue potential and business viability in the long term.</li>
+                <li>Vulnerability to competition or market shifts due to the narrow user base.</li>
+                <li>Difficulty in securing funding or investments for future expansion.</li>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        Powered by AWS | Contact: example@company.com
+    </footer>
+
+    <script>
+        // Sample data for chart
+        const userDistributionData = {
+            labels: ['Active Users', 'Inactive Users', 'Complete Profiles', 'Incomplete Profiles', 'Total Users'],
+            datasets: [{
+                label: 'User Distribution',
+                data: [5, 0, 5, 0, 5],
+                backgroundColor: ['#FF9900', '#232F3E', '#FF9900', '#232F3E', '#FF9900']
+            }]
+        };
+
+        // Create the chart
+        const ctx = document.getElementById('userDistributionChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: userDistributionData,
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'MySQL User Distribution'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

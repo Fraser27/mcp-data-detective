@@ -9,8 +9,10 @@ import ChartWidget from './ChartWidget';
 import StreamingIndicator from './StreamingIndicator';
 import ThinkingProcess from './ThinkingProcess';
 import PlanConfirmationDialog from './PlanConfirmationDialog';
+import HTMLContentRenderer from './HTMLContentRenderer';
 import { useChat } from '../contexts/ChatContext';
 import axios from 'axios';
+import SherlockAvatar from './SherlockAvatar';
 
 // Dashboard renderer component
 function DashboardRenderer({ filename, metadata }) {
@@ -344,15 +346,15 @@ function ChatMessage({ message }) {
         <div className="space-y-3">
           {/* Tool usage indicator */}
           {message.toolUse && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <div className="bg-detective-accent/10 border border-detective-accent/30 rounded-lg p-3">
               <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                <span className="text-sm font-medium text-blue-700">
+                <div className="w-2 h-2 bg-detective-accent rounded-full animate-pulse"></div>
+                <span className="text-sm font-medium text-detective-700">
                   Using tool: {message.toolUse.tool}
                 </span>
               </div>
               {message.toolUse.description && (
-                <p className="text-xs text-blue-600 mt-1">
+                <p className="text-xs text-detective-600 mt-1">
                   {message.toolUse.description}
                 </p>
               )}
@@ -361,12 +363,12 @@ function ChatMessage({ message }) {
           
           {/* Real-time thinking indicator */}
           {message.thinking && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <div className="bg-detective-accent/10 border border-detective-accent/30 rounded-lg p-3">
               <div className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                <span className="text-sm font-medium text-blue-700">Thinking...</span>
+                <div className="w-2 h-2 bg-detective-accent rounded-full animate-pulse"></div>
+                <span className="text-sm font-medium text-detective-700">Investigating...</span>
               </div>
-              <div className="text-sm text-blue-600 mt-2 italic max-h-32 overflow-y-auto">
+              <div className="text-sm text-detective-600 mt-2 italic max-h-32 overflow-y-auto">
                 <p className="whitespace-pre-wrap leading-relaxed">
                   {message.thinking}
                 </p>
@@ -377,8 +379,8 @@ function ChatMessage({ message }) {
           {/* Default loading indicator */}
           {!message.thinking && !message.toolUse && (
             <div className="flex items-center space-x-2">
-              <Loader2 className="h-4 w-4 animate-spin text-primary-500" />
-              <span className="text-gray-600">Thinking...</span>
+              <Loader2 className="h-4 w-4 animate-spin text-detective-accent" />
+              <span className="text-detective-600">Investigating...</span>
             </div>
           )}
           
@@ -491,16 +493,33 @@ function ChatMessage({ message }) {
                 </p>
               )}
             </div>
-            <div 
-              className="border border-gray-200 rounded-lg overflow-hidden"
-              dangerouslySetInnerHTML={{ __html: message.dashboard }}
-            />
+            {message.dashboard.startsWith('<!DOCTYPE html>') || message.dashboard.startsWith('<html') ? (
+              <HTMLContentRenderer 
+                htmlContent={message.dashboard} 
+                metadata={message.dashboardMetadata} 
+                title="Generated Dashboard"
+              />
+            ) : (
+              <div 
+                className="border border-gray-200 rounded-lg overflow-hidden"
+                dangerouslySetInnerHTML={{ __html: message.dashboard }}
+              />
+            )}
           </div>
         )}
 
         {/* Dashboard file if present */}
         {message.dashboardFile && (
           <DashboardRenderer filename={message.dashboardFile} metadata={message.dashboardMetadata} />
+        )}
+        
+        {/* HTML content from custom_summarization_agent */}
+        {message.htmlContent && (
+          <HTMLContentRenderer 
+            htmlContent={message.htmlContent} 
+            metadata={message.metadata} 
+            title={message.htmlContentTitle || "Analysis Report"}
+          />
         )}
       </div>
     );
@@ -513,13 +532,13 @@ function ChatMessage({ message }) {
         <div className={`flex-shrink-0 ${isUser ? 'ml-3' : 'mr-3'}`}>
           <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
             isUser 
-              ? 'bg-primary-500 text-white' 
-              : 'bg-gray-200 text-gray-600'
+              ? 'bg-detective-700 text-white' 
+              : 'bg-detective-accent/20 text-detective-accent'
           }`}>
             {isUser ? (
               <User className="h-4 w-4" />
             ) : (
-              <Bot className="h-4 w-4" />
+              <SherlockAvatar className="h-5 w-5" />
             )}
           </div>
         </div>
@@ -528,8 +547,8 @@ function ChatMessage({ message }) {
         <div className={`flex-1 ${isUser ? 'text-right' : 'text-left'}`}>
           <div className={`inline-block p-4 rounded-lg ${
             isUser 
-              ? 'bg-primary-500 text-white' 
-              : 'bg-white border border-gray-200 shadow-sm'
+              ? 'bg-detective-700 text-white shadow-detective' 
+              : 'bg-white/90 border border-detective-200 shadow-detective'
           }`}>
             {renderContent()}
           </div>

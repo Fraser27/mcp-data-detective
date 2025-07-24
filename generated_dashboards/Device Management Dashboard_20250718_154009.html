@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Management Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8 text-center">Device Management Dashboard</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Device Types Distribution -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Device Types Distribution</h2>
+                <canvas id="deviceTypesChart"></canvas>
+            </div>
+
+            <!-- Devices by Manufacturer -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Devices by Manufacturer</h2>
+                <canvas id="manufacturerChart"></canvas>
+            </div>
+
+            <!-- Device Count and Status -->
+            <div class="bg-white p-6 rounded-lg shadow-md col-span-1 md:col-span-2">
+                <h2 class="text-xl font-semibold mb-4">Device Count and Status</h2>
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="border p-2 text-left">Metric</th>
+                            <th class="border p-2 text-left">Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border p-2">Total Devices</td>
+                            <td class="border p-2">14</td>
+                        </tr>
+                        <tr>
+                            <td class="border p-2">Current Online Devices</td>
+                            <td class="border p-2">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border p-2">Recent Installations (Last 30 days)</td>
+                            <td class="border p-2">0</td>
+                        </tr>
+                        <tr>
+                            <td class="border p-2">Devices Needing Maintenance</td>
+                            <td class="border p-2">14</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center text-sm text-gray-500">
+            Dashboard generated on: <span id="timestamp"></span>
+        </div>
+    </div>
+
+    <script>
+        // Device Types Distribution Chart
+        const deviceTypesCtx = document.getElementById('deviceTypesChart').getContext('2d');
+        new Chart(deviceTypesCtx, {
+            type: 'pie',
+            data: {
+                labels: ['DISPENSER', 'POS', 'TANK-GAUGE'],
+                datasets: [{
+                    data: [7, 6, 1],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Device Types Distribution'
+                    }
+                }
+            }
+        });
+
+        // Devices by Manufacturer Chart
+        const manufacturerCtx = document.getElementById('manufacturerChart').getContext('2d');
+        new Chart(manufacturerCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Wayne Fueling Systems', 'Gilbarco Veeder-Root'],
+                datasets: [{
+                    data: [7, 7],
+                    backgroundColor: ['#4BC0C0', '#FF9F40']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Devices by Manufacturer'
+                    }
+                }
+            }
+        });
+
+        // Set timestamp
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+    </script>
+</body>
+</html>

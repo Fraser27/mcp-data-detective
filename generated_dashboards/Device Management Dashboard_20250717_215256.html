@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Management Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold mb-4">Device Management Dashboard</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Device Count -->
+            <div class="bg-white p-4 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-2">Device Count</h2>
+                <p class="text-4xl font-bold">14</p>
+            </div>
+
+            <!-- Device Types Distribution -->
+            <div class="bg-white p-4 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-2">Device Types Distribution</h2>
+                <canvas id="deviceTypesChart"></canvas>
+            </div>
+
+            <!-- Devices by Manufacturer -->
+            <div class="bg-white p-4 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-2">Devices by Manufacturer</h2>
+                <table class="w-full">
+                    <thead>
+                        <tr>
+                            <th class="text-left">Manufacturer</th>
+                            <th class="text-right">Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Wayne Fueling Systems</td>
+                            <td class="text-right">7</td>
+                        </tr>
+                        <tr>
+                            <td>Gilbarco Veeder-Root</td>
+                            <td class="text-right">7</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Recent Installations -->
+            <div class="bg-white p-4 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-2">Recent Installations</h2>
+                <table class="w-full">
+                    <thead>
+                        <tr>
+                            <th class="text-left">Device ID</th>
+                            <th class="text-left">Type</th>
+                            <th class="text-left">Installation Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>DEV_014</td>
+                            <td>POS</td>
+                            <td>2022-06-18</td>
+                        </tr>
+                        <tr>
+                            <td>DEV_013</td>
+                            <td>DISPENSER</td>
+                            <td>2022-06-18</td>
+                        </tr>
+                        <tr>
+                            <td>DEV_012</td>
+                            <td>POS</td>
+                            <td>2022-05-12</td>
+                        </tr>
+                        <tr>
+                            <td>DEV_011</td>
+                            <td>DISPENSER</td>
+                            <td>2022-05-12</td>
+                        </tr>
+                        <tr>
+                            <td>DEV_010</td>
+                            <td>POS</td>
+                            <td>2022-04-05</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Devices Needing Maintenance -->
+            <div class="bg-white p-4 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-2">Devices Needing Maintenance</h2>
+                <p class="text-4xl font-bold">2</p>
+                <p class="text-sm text-gray-500">Out of 4 total devices</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Device Types Distribution Chart
+        const deviceTypesCtx = document.getElementById('deviceTypesChart').getContext('2d');
+        new Chart(deviceTypesCtx, {
+            type: 'pie',
+            data: {
+                labels: ['DISPENSER', 'POS', 'TANK-GAUGE'],
+                datasets: [{
+                    data: [7, 6, 1],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Device Types Distribution'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

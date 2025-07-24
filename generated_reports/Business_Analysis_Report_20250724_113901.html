@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Analysis Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* CSS styles */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            background-color: #232F3E;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            height: 50px;
+        }
+        
+        main {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chart-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        footer {
+            background-color: #232F3E;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://via.placeholder.com/150x50?text=AWS+Logo" alt="AWS Logo" class="logo">
+        <h1>Business Analysis Report</h1>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="card">
+                <h2>Executive Summary</h2>
+                <p>The data analysis reveals that the top users in terms of the most products purchased and the maximum purchase value are:</p>
+                <ul>
+                    <li>John Doe (user_id 1) - 3 unique products, 3 total products, $1,419.97 total purchase value</li>
+                    <li>Bob Wilson (user_id 3) - 2 unique products, 2 total products, $249.98 total purchase value</li>
+                    <li>Jane Smith (user_id 2) - 2 unique products, 2 total products, $42.98 total purchase value</li>
+                    <li>Alice Brown (user_id 4) - 2 unique products, 2 total products, $32.98 total purchase value</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="card">
+                <h2>Key Insights</h2>
+                <div class="chart-container">
+                    <canvas id="productCountChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="purchaseValueChart"></canvas>
+                </div>
+                <p>The data reveals that a small number of users are responsible for a significant portion of the company's revenue. Focusing on these high-value customers could be a strategic priority for the business.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="card">
+                <h2>Actionable Recommendations</h2>
+                <ol>
+                    <li>Implement a customer loyalty program to incentivize and retain the top-spending users like John Doe, Bob Wilson, and Jane Smith.</li>
+                    <li>Explore ways to cross-sell or upsell to these high-value customers, potentially by offering personalized product recommendations or bundled deals.</li>
+                    <li>Analyze the buying patterns and preferences of these top customers to identify new product opportunities or optimize the e-commerce platform.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="card">
+                <h2>Risk Assessment</h2>
+                <p>The data suggests that a small number of users are responsible for a significant portion of the company's revenue. This could pose a risk if these high-value customers were to stop purchasing or switch to a competitor. It's important to implement strategies to diversify the customer base and reduce reliance on a few key accounts.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 AWS. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Chart initialization code
+        var ctx = document.getElementById('productCountChart').getContext('2d');
+        var productCountChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['John Doe', 'Bob Wilson', 'Jane Smith', 'Alice Brown'],
+                datasets: [{
+                    label: 'Unique Products',
+                    data: [3, 2, 2, 2],
+                    backgroundColor: '#FF9900'
+                }, {
+                    label: 'Total Products',
+                    data: [3, 2, 2, 2],
+                    backgroundColor: '#232F3E'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        var ctx2 = document.getElementById('purchaseValueChart').getContext('2d');
+        var purchaseValueChart = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['John Doe', 'Bob Wilson', 'Jane Smith', 'Alice Brown'],
+                datasets: [{
+                    label: 'Total Purchase Value',
+                    data: [1419.97, 249.98, 42.98, 32.98],
+                    backgroundColor: '#FF9900'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Products Analysis Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* General Styles */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #232F3E;
+        }
+
+        header {
+            background-color: #FF9900;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            height: 30px;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        main {
+            padding: 40px;
+        }
+
+        section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-gap: 20px;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 300px;
+        }
+
+        footer {
+            background-color: #232F3E;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://aws.amazon.com/s3/images/aws-logo.svg" alt="AWS Logo" class="logo">
+        <h1>Top Products Analysis Report</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>Executive Summary</h2>
+            <div class="card">
+                <p>The analysis of the top-selling products in the ecommerce database reveals that the Electronics category, specifically the Laptop Pro product, dominates the sales. The Laptop Pro product has significantly higher sales compared to other top-selling items, indicating a potential sales anomaly or market opportunity.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Key Findings</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Top Product</h3>
+                    <p>Laptop Pro</p>
+                </div>
+                <div class="card">
+                    <h3>Top Product Category</h3>
+                    <p>Electronics</p>
+                </div>
+                <div class="card">
+                    <h3>Total Sales</h3>
+                    <p>$1,299.99</p>
+                </div>
+                <div class="card">
+                    <h3>Number of Top Products</h3>
+                    <p>7</p>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Sales Distribution</h3>
+                <p>The sales data shows that the Electronics category dominates the top-selling products, with the Laptop Pro product significantly outperforming other items.</p>
+                <div class="chart-container">
+                    <canvas id="salesDistributionChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Top 3 Products</h3>
+                <ol>
+                    <li>Laptop Pro</li>
+                    <li>Office Chair</li>
+                    <li>Keyboard</li>
+                </ol>
+            </div>
+            <div class="card">
+                <h3>Sales Anomaly</h3>
+                <p>The Laptop Pro product's sales are considerably higher than the other top-selling items, indicating a potential sales anomaly or a significant market opportunity.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Business Impact</h2>
+            <div class="card">
+                <p>The dominance of the Electronics category, particularly the Laptop Pro product, suggests that the business should focus on optimizing the sales and marketing strategies for this product line. Additionally, the sales anomaly with the Laptop Pro product presents an opportunity to investigate the underlying factors driving its high performance, which could lead to insights for expanding the sales of other product categories.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Immediate Action Items</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>1. Optimize Laptop Pro Sales and Marketing</h3>
+                    <p>Review the sales and marketing strategies for the Laptop Pro product to ensure it is effectively reaching and converting the target audience. Identify any areas for improvement, such as pricing, promotions, or targeted advertising.</p>
+                </div>
+                <div class="card">
+                    <h3>2. Investigate Laptop Pro Sales Anomaly</h3>
+                    <p>Conduct a deeper analysis to understand the factors contributing to the Laptop Pro product's significantly higher sales compared to other top-selling items. This could reveal insights about customer preferences, market trends, or opportunities to expand sales of other product categories.</p>
+                </div>
+                <div class="card">
+                    <h3>3. Diversify Product Offerings</h3>
+                    <p>While the Electronics category dominates the top sales, consider expanding the product portfolio to include a more diverse range of items that could appeal to a wider customer base. This could help balance the sales distribution and reduce the reliance on a single category.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Risk Mitigation</h2>
+            <div class="card">
+                <p>The high concentration of sales in the Electronics category, particularly the Laptop Pro product, presents a potential risk of over-reliance on a single product line. To mitigate this risk, the business should explore strategies to diversify the product offerings, monitor market trends, and ensure a balanced sales portfolio. Additionally, closely tracking the Laptop Pro sales anomaly and understanding the underlying factors will help the business identify potential risks and take proactive measures to address them.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Powered by AWS. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Sample data for the sales distribution chart
+        const salesDistributionData = {
+            labels: ['Laptop Pro', 'Office Chair', 'Keyboard', 'Desk Lamp', 'Wireless Mouse', 'Standing Desk', 'Desktop Computer'],
+            datasets: [{
+                label: 'Sales',
+                data: [1299.99, 199.99, 89.99, 59.99, 49.99, 299.99, 899.99],
+                backgroundColor: ['#FF9900', '#232F3E', '#8E8E93', '#007AFF', '#5856D6', '#FF2D55', '#34C759']
+            }]
+        };
+
+        // Create the sales distribution chart
+        const salesDistributionChart = new Chart(document.getElementById('salesDistributionChart'), {
+            type: 'bar',
+            data: salesDistributionData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toFixed(2);
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Sales Distribution'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

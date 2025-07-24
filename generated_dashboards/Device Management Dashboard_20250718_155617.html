@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Management Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8 text-center">Device Management Dashboard</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Device Types Distribution -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Device Types Distribution</h2>
+                <canvas id="deviceTypesChart"></canvas>
+            </div>
+
+            <!-- Devices by Manufacturer -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Devices by Manufacturer</h2>
+                <canvas id="manufacturerChart"></canvas>
+            </div>
+
+            <!-- Recent Installations -->
+            <div class="bg-white p-6 rounded-lg shadow-md col-span-1 md:col-span-2">
+                <h2 class="text-xl font-semibold mb-4">Recent Installations</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="py-2 px-4 border-b text-left">Device ID</th>
+                                <th class="py-2 px-4 border-b text-left">Device Type</th>
+                                <th class="py-2 px-4 border-b text-left">Installation Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="py-2 px-4 border-b">DEV_014</td>
+                                <td class="py-2 px-4 border-b">POS</td>
+                                <td class="py-2 px-4 border-b">2022-06-18</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">DEV_013</td>
+                                <td class="py-2 px-4 border-b">DISPENSER</td>
+                                <td class="py-2 px-4 border-b">2022-06-18</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">DEV_012</td>
+                                <td class="py-2 px-4 border-b">POS</td>
+                                <td class="py-2 px-4 border-b">2022-05-12</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">DEV_011</td>
+                                <td class="py-2 px-4 border-b">DISPENSER</td>
+                                <td class="py-2 px-4 border-b">2022-05-12</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b">DEV_010</td>
+                                <td class="py-2 px-4 border-b">POS</td>
+                                <td class="py-2 px-4 border-b">2022-04-05</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Device Types Distribution Chart
+        const deviceTypesCtx = document.getElementById('deviceTypesChart').getContext('2d');
+        new Chart(deviceTypesCtx, {
+            type: 'pie',
+            data: {
+                labels: ['DISPENSER', 'POS', 'TANK-GAUGE'],
+                datasets: [{
+                    data: [7, 6, 1],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Device Types Distribution'
+                    }
+                }
+            }
+        });
+
+        // Devices by Manufacturer Chart
+        const manufacturerCtx = document.getElementById('manufacturerChart').getContext('2d');
+        new Chart(manufacturerCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Wayne Fueling Systems', 'Gilbarco Veeder-Root'],
+                datasets: [{
+                    data: [7, 7],
+                    backgroundColor: ['#4BC0C0', '#FF9F40']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Devices by Manufacturer'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

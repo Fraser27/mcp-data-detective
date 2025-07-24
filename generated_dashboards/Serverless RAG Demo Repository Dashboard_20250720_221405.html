@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serverless RAG Demo Repository Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Serverless RAG Demo Repository Dashboard</h1>
+            <p class="text-sm text-gray-600">Generated on <span id="timestamp"></span></p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold mb-4">Key Features</h2>
+                <canvas id="featuresChart"></canvas>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold mb-4">Repository Details</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-500">
+                        <tbody>
+                            <tr class="bg-white border-b">
+                                <th class="py-2 px-4 font-medium text-gray-900 whitespace-nowrap">Repository Name</th>
+                                <td class="py-2 px-4">serverless-rag-demo</td>
+                            </tr>
+                            <tr class="bg-gray-50 border-b">
+                                <th class="py-2 px-4 font-medium text-gray-900 whitespace-nowrap">Organization</th>
+                                <td class="py-2 px-4">aws-samples</td>
+                            </tr>
+                            <tr class="bg-white border-b">
+                                <th class="py-2 px-4 font-medium text-gray-900 whitespace-nowrap">Description</th>
+                                <td class="py-2 px-4">Amazon Bedrock Foundation models with Amazon Opensearch Serverless as a Vector DB</td>
+                            </tr>
+                            <tr class="bg-gray-50 border-b">
+                                <th class="py-2 px-4 font-medium text-gray-900 whitespace-nowrap">Primary Language</th>
+                                <td class="py-2 px-4">Python</td>
+                            </tr>
+                            <tr class="bg-white border-b">
+                                <th class="py-2 px-4 font-medium text-gray-900 whitespace-nowrap">Stars</th>
+                                <td class="py-2 px-4">198</td>
+                            </tr>
+                            <tr class="bg-gray-50 border-b">
+                                <th class="py-2 px-4 font-medium text-gray-900 whitespace-nowrap">Forks</th>
+                                <td class="py-2 px-4">59</td>
+                            </tr>
+                            <tr class="bg-white border-b">
+                                <th class="py-2 px-4 font-medium text-gray-900 whitespace-nowrap">License</th>
+                                <td class="py-2 px-4">MIT-0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8">
+            <button id="downloadBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                Download Dashboard HTML
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Set timestamp
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+
+        // Features Chart
+        const featuresCtx = document.getElementById('featuresChart').getContext('2d');
+        new Chart(featuresCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Document chat', 'Multi-Agent collaboration', 'Sentiment Analysis', 'PII Redaction', 'OCR'],
+                datasets: [{
+                    data: [1, 1, 1, 1, 1],
+                    backgroundColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#4BC0C0',
+                        '#9966FF'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Key Features Distribution'
+                    }
+                }
+            }
+        });
+
+        // Download functionality
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'serverless-rag-demo-dashboard.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>

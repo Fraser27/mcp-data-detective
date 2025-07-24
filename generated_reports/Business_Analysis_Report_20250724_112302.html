@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Analysis Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        
+        /* Header and Footer Styles */
+        header, footer {
+            background-color: #232F3E;
+            color: #ffffff;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo {
+            max-width: 100px;
+            margin-right: 1rem;
+        }
+        
+        /* Main Content Styles */
+        main {
+            padding: 2rem;
+        }
+        
+        section {
+            margin-bottom: 2rem;
+            background-color: #f2f2f2;
+            padding: 1.5rem;
+            border-radius: 5px;
+        }
+        
+        h2 {
+            color: #FF9900;
+            margin-bottom: 1rem;
+        }
+        
+        p {
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+        
+        ul {
+            list-style-type: disc;
+            padding-left: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        li {
+            line-height: 1.5;
+        }
+        
+        /* Chart Styles */
+        canvas {
+            max-width: 100%;
+            height: auto !important;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://via.placeholder.com/150x50?text=AWS+Logo" alt="AWS Logo" class="logo">
+        <h1>Business Analysis Report</h1>
+    </header>
+    
+    <main>
+        <section>
+            <h2>Executive Summary</h2>
+            <p>The analysis of the MySQL database reveals a well-structured data ecosystem with two distinct schemas: ecommerce and iot. The ecommerce schema contains four tables (order_items, orders, products, and users), while the iot schema includes four tables (devices, nozzles, organizations, and sites). This comprehensive data foundation provides valuable insights for the business.</p>
+        </section>
+        
+        <section>
+            <h2>Key Insights</h2>
+            <p>The data shows a balanced distribution of tables across the two schemas, indicating a well-planned database design. The ecommerce schema suggests a focus on online sales and customer management, while the iot schema suggests a focus on connected devices and their associated data.</p>
+            
+            <div class="chart-container">
+                <canvas id="schemaDistribution"></canvas>
+            </div>
+            
+            <p>The presence of tables like "orders" and "order_items" in the ecommerce schema suggests that the business is actively tracking sales and customer behavior, which can be leveraged for strategic decision-making.</p>
+            
+            <div class="chart-container">
+                <canvas id="ordersOverTime"></canvas>
+            </div>
+        </section>
+        
+        <section>
+            <h2>Business Impact</h2>
+            <p>The data provided indicates a well-structured and organized database, which is essential for effective data-driven decision-making. The ecommerce and iot schemas suggest that the business is actively engaged in both online sales and IoT-related operations, presenting opportunities for cross-selling, customer retention, and operational efficiency improvements.</p>
+        </section>
+        
+        <section>
+            <h2>Immediate Action Items</h2>
+            <ul>
+                <li>Leverage the order and customer data in the ecommerce schema to develop targeted marketing campaigns and improve the customer experience.</li>
+                <li>Analyze the IoT data from the iot schema to identify opportunities for optimizing device performance, reducing maintenance costs, and enhancing overall operational efficiency.</li>
+                <li>Explore the possibility of integrating the ecommerce and iot data to gain a more comprehensive understanding of customer behavior and device usage patterns, enabling the business to offer more personalized products and services.</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h2>Risk Mitigation</h2>
+            <p>The well-structured and organized nature of the database suggests that the business has a strong foundation for data management and governance. However, it is important to regularly monitor the database for any potential issues, such as data quality, security vulnerabilities, or scalability concerns, to ensure the continued reliability and integrity of the data.</p>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2023 AWS. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        // Sample data for charts
+        const schemaDistributionData = {
+            labels: ['ecommerce', 'iot'],
+            datasets: [{
+                label: 'Number of Tables',
+                data: [4, 4],
+                backgroundColor: ['#FF9900', '#232F3E']
+            }]
+        };
+        
+        const ordersOverTimeData = {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Orders',
+                data: [120, 150, 180, 200, 220, 240],
+                backgroundColor: '#FF9900',
+                borderColor: '#FF9900',
+                fill: false
+            }]
+        };
+        
+        // Chart initialization
+        const schemaDistributionCtx = document.getElementById('schemaDistribution').getContext('2d');
+        new Chart(schemaDistributionCtx, {
+            type: 'bar',
+            data: schemaDistributionData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Database Schema Distribution'
+                    }
+                }
+            }
+        });
+        
+        const ordersOverTimeCtx = document.getElementById('ordersOverTime').getContext('2d');
+        new Chart(ordersOverTimeCtx, {
+            type: 'line',
+            data: ordersOverTimeData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Orders Over Time'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

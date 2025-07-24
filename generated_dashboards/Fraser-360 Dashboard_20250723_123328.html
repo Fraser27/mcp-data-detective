@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraser-360 Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <header class="mb-8">
+            <img src="https://d1.awsstatic.com/logos/aws-logo-lockups/poweredbyaws/PB_AWS_logo_RGB_stacked_REV_SQ.91cd4af40773cbfbd15577a3c2b8a346fe3e8fa2.png" alt="Powered by AWS" class="h-8 mb-4">
+            <h1 class="text-3xl font-bold mb-2">Fraser-360 Dashboard</h1>
+            <p class="text-gray-600">A comprehensive overview of Fraser Sequeira's online presence and project engagement</p>
+            <p class="text-sm text-gray-500 mt-2">Generated on: <span id="timestamp"></span></p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">LinkedIn Post Reactions</h2>
+                <canvas id="linkedinChart"></canvas>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">GitHub Repository Stars</h2>
+                <canvas id="githubStarsChart"></canvas>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow col-span-full">
+                <h2 class="text-xl font-semibold mb-4">GitHub Repository Details</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="bg-gray-200">
+                                <th class="px-4 py-2">Repository</th>
+                                <th class="px-4 py-2">Stars</th>
+                                <th class="px-4 py-2">Forks</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border px-4 py-2">aws-rekognition-liveness-detection</td>
+                                <td class="border px-4 py-2">18</td>
+                                <td class="border px-4 py-2">19</td>
+                            </tr>
+                            <tr>
+                                <td class="border px-4 py-2">serverless-rag-demo</td>
+                                <td class="border px-4 py-2">198</td>
+                                <td class="border px-4 py-2">59</td>
+                            </tr>
+                            <tr>
+                                <td class="border px-4 py-2">amazon-serverless-datalake-workshop</td>
+                                <td class="border px-4 py-2">158</td>
+                                <td class="border px-4 py-2">80</td>
+                            </tr>
+                            <tr>
+                                <td class="border px-4 py-2">serverless-datalake</td>
+                                <td class="border px-4 py-2">13</td>
+                                <td class="border px-4 py-2">7</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8">
+            <button id="exportButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Export Dashboard
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Set timestamp
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+
+        // LinkedIn Post Reactions Chart
+        const linkedinCtx = document.getElementById('linkedinChart').getContext('2d');
+        new Chart(linkedinCtx, {
+            type: 'bar',
+            data: {
+                labels: ['AWSBuilders Online Series', 'Agentic AI with AWS', 'Amazon OpenSearch Service 101', 'AWS Bangalore Summit 2024', 'Multi-Agent Architecture with AWS Strands SDK'],
+                datasets: [{
+                    label: 'Reactions',
+                    data: [94, 27, 32, 148, 33],
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // GitHub Repository Stars Chart
+        const githubCtx = document.getElementById('githubStarsChart').getContext('2d');
+        new Chart(githubCtx, {
+            type: 'pie',
+            data: {
+                labels: ['aws-rekognition-liveness-detection', 'serverless-rag-demo', 'amazon-serverless-datalake-workshop', 'serverless-datalake'],
+                datasets: [{
+                    data: [18, 198, 158, 13],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    },
+                    title: {
+                        display: true,
+                        text: 'GitHub Repository Stars Distribution'
+                    }
+                }
+            }
+        });
+
+        // Export functionality
+        document.getElementById('exportButton').addEventListener('click', function() {
+            const dashboardHtml = document.documentElement.outerHTML;
+            const blob = new Blob([dashboardHtml], {type: 'text/html'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'fraser-360-dashboard.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>

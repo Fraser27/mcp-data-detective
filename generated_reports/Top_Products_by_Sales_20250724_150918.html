@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Products by Sales</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* CSS Styles */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #232F3E;
+        }
+        
+        header {
+            background-color: #232F3E;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            height: 30px;
+            width: auto;
+        }
+        
+        h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+        
+        main {
+            padding: 20px;
+        }
+        
+        .section {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .chart-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        footer {
+            background-color: #232F3E;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://aws.amazon.com/images/logos/aws_logo_smile_1200x630.png" alt="AWS Logo" class="logo">
+        <h1>Top Products by Sales</h1>
+    </header>
+    
+    <main>
+        <div class="section">
+            <h2>Executive Summary</h2>
+            <p>The analysis of the e-commerce sales data reveals that the top-selling products are primarily in the Electronics and Furniture categories, with the "Laptop Pro" being the highest-selling item. However, the overall number of sales is relatively low, with most products having only a single unit sold.</p>
+        </div>
+        
+        <div class="section">
+            <h2>Key Insights</h2>
+            <div class="chart-container">
+                <canvas id="topProductsChart"></canvas>
+            </div>
+            <p>The key insights from the data analysis are:</p>
+            <ul>
+                <li>The "Laptop Pro" is the top-selling product, generating $1,299.99 in sales from a single unit sold, suggesting it is a high-ticket item.</li>
+                <li>The Electronics and Furniture categories dominate the top-selling products, with 4 out of the top 7 products belonging to these categories.</li>
+                <li>Most products have only a single unit sold, indicating a low overall number of orders or a limited product selection.</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>Business Impact</h2>
+            <p>The low number of total sales and the concentration of sales in a few high-ticket items suggest potential issues with the e-commerce business. The limited product selection and lack of repeat purchases may indicate a need to expand the product catalog and improve customer engagement.</p>
+        </div>
+        
+        <div class="section">
+            <h2>Immediate Action Items</h2>
+            <ol>
+                <li>Analyze the factors contributing to the high sales of the "Laptop Pro" and consider expanding the product line in the Electronics category.</li>
+                <li>Investigate ways to increase the number of orders and encourage repeat purchases, such as targeted marketing campaigns, loyalty programs, or improving the overall customer experience.</li>
+                <li>Expand the product selection, especially in the Furniture and Office Supplies categories, to cater to a wider range of customer needs.</li>
+            </ol>
+        </div>
+        
+        <div class="section">
+            <h2>Risk Mitigation</h2>
+            <p>The concentration of sales in a few high-ticket items and the low overall number of sales pose risks to the long-term sustainability of the e-commerce business. To mitigate these risks, the business should:</p>
+            <ul>
+                <li>Diversify the product portfolio to reduce reliance on a single or few high-value items.</li>
+                <li>Implement customer retention strategies to increase repeat business and build a loyal customer base.</li>
+                <li>Continuously monitor sales trends and customer behavior to identify and address any emerging issues or opportunities.</li>
+            </ul>
+        </div>
+    </main>
+    
+    <footer>
+        &copy; 2023 E-commerce Business. Powered by AWS.
+    </footer>
+    
+    <script>
+        // Chart.js initialization
+        var ctx = document.getElementById('topProductsChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Laptop Pro', 'Office Chair', 'Keyboard', 'Wireless Mouse', 'Desk Lamp', 'Coffee Mug', 'Water Bottle'],
+                datasets: [{
+                    label: 'Total Sales',
+                    data: [1299.99, 199.99, 89.99, 59.98, 49.99, 25.98, 19.99],
+                    backgroundColor: '#FF9900'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value, index, ticks) {
+                                return '$' + value.toFixed(2);
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Top Products by Total Sales'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

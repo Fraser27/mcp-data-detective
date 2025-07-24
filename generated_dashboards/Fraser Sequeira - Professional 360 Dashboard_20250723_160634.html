@@ -1,0 +1,116 @@
+Here's a comprehensive HTML dashboard for Fraser Sequeira's 360 Profile:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraser Sequeira - Professional 360 Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
+    <header class="bg-blue-600 text-white p-4 shadow-lg flex justify-between items-center">
+        <div class="flex items-center">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" alt="AWS Logo" class="h-10 mr-4">
+            <h1 class="text-2xl font-bold">Fraser Sequeira - Professional Dashboard</h1>
+        </div>
+        <button id="darkModeToggle" class="bg-gray-700 text-white px-4 py-2 rounded">🌓 Dark Mode</button>
+    </header>
+
+    <main class="container mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <section class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">AWS Samples Repositories</h2>
+            <canvas id="repositoryStarsChart"></canvas>
+        </section>
+
+        <section class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <h2 class="text-xl font-semibold mb-4">Technical Skills Distribution</h2>
+            <canvas id="skillsDistributionChart"></canvas>
+        </section>
+
+        <section class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:col-span-2">
+            <h2 class="text-xl font-semibold mb-4">Repository Performance</h2>
+            <canvas id="repositoryPerformanceChart"></canvas>
+        </section>
+    </main>
+
+    <footer class="bg-gray-200 dark:bg-gray-700 p-4 text-center">
+        <p>Dashboard Generated: <span id="timestamp"></span></p>
+    </footer>
+
+    <script>
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+
+        // Repository Stars Chart
+        new Chart(document.getElementById('repositoryStarsChart'), {
+            type: 'bar',
+            data: {
+                labels: ['serverless-rag-demo', 'aws-rekognition', 'serverless-datalake', 'opensearch-tutorials'],
+                datasets: [{
+                    label: 'Repository Stars',
+                    data: [198, 18, 13, 2],
+                    backgroundColor: ['#3B82F6', '#10B981', '#8B5CF6', '#F43F5E']
+                }]
+            }
+        });
+
+        // Skills Distribution Chart
+        new Chart(document.getElementById('skillsDistributionChart'), {
+            type: 'pie',
+            data: {
+                labels: ['AWS Cloud', 'Generative AI', 'Serverless', 'Machine Learning', 'Data Engineering'],
+                datasets: [{
+                    data: [20, 20, 20, 20, 20],
+                    backgroundColor: ['#3B82F6', '#10B981', '#8B5CF6', '#F43F5E', '#F59E0B']
+                }]
+            }
+        });
+
+        // Repository Performance Scatter Plot
+        new Chart(document.getElementById('repositoryPerformanceChart'), {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Stars vs Forks',
+                    data: [
+                        {x: 198, y: 59},
+                        {x: 18, y: 19},
+                        {x: 13, y: 7},
+                        {x: 2, y: 0}
+                    ],
+                    backgroundColor: '#3B82F6'
+                }]
+            },
+            options: {
+                scales: {
+                    x: { title: { display: true, text: 'Stars' } },
+                    y: { title: { display: true, text: 'Forks' } }
+                }
+            }
+        });
+
+        // Dark Mode Toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+    </script>
+</body>
+</html>
+```
+
+Key Features Implemented:
+✅ Responsive Design
+✅ Dark Mode Toggle
+✅ Chart.js Visualizations
+✅ Tailwind CSS Styling
+✅ AWS Logo
+✅ Timestamp
+✅ Interactive Charts
+✅ Clean, Modern UI

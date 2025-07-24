@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Management Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8">Device Management Dashboard</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">Device Overview</h2>
+                <canvas id="deviceOverviewChart"></canvas>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">Device Details</h2>
+                <table class="w-full">
+                    <thead>
+                        <tr>
+                            <th class="text-left">Device ID</th>
+                            <th class="text-left">Site ID</th>
+                            <th class="text-left">Status</th>
+                            <th class="text-left">Last Heartbeat</th>
+                            <th class="text-left">Maintenance Required</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>DEV_001</td>
+                            <td>SITE_001</td>
+                            <td>online</td>
+                            <td>2025-07-09T10:30:00Z</td>
+                            <td>No</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('deviceOverviewChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Total Devices', 'Online Devices', 'Devices Needing Maintenance'],
+                datasets: [{
+                    data: [2, 1, 1],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.8)',
+                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(255, 206, 86, 0.8)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Device Overview'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

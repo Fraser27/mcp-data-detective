@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySQL User Distribution Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* CSS reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Global styles */
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #232F3E;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        /* Header styles */
+        header {
+            background-color: #232F3E;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        /* Main content styles */
+        section {
+            margin-bottom: 40px;
+        }
+        
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .card {
+            background-color: #f2f2f2;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Chart styles */
+        .chart-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Footer styles */
+        footer {
+            background-color: #232F3E;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Powered by AWS</div>
+        <h1>MySQL User Distribution Analysis</h1>
+    </header>
+
+    <div class="container">
+        <section>
+            <h2>Executive Summary</h2>
+            <div class="card">
+                <p>The analysis of the MySQL user distribution reveals a small user base with 5 active users, all of whom have complete profiles. This suggests a limited user engagement in the current system.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>Key Insights</h2>
+            <div class="card">
+                <ul>
+                    <li>Total users in the database: 5</li>
+                    <li>All users are active (100%)</li>
+                    <li>All users have complete profiles</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>Actionable Recommendations</h2>
+            <div class="card">
+                <ol>
+                    <li>Investigate ways to expand the user base and attract more customers to the platform.</li>
+                    <li>Analyze user behavior and engagement to identify areas for improvement and better user retention.</li>
+                    <li>Implement targeted marketing and acquisition strategies to reach a wider audience and grow the user base.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section>
+            <h2>Risk Assessment</h2>
+            <div class="card">
+                <p>The small user base suggests a risk of limited growth and revenue potential for the business. It's critical to address this issue and implement strategies to expand the user base and improve user engagement.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>User Distribution</h2>
+            <div class="chart-container">
+                <canvas id="userDistribution"></canvas>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 | Business Analysis Report</p>
+    </footer>
+
+    <script>
+        // Sample data for the chart
+        const userData = {
+            labels: ['Active Users', 'Inactive Users', 'Complete Profiles', 'Incomplete Profiles', 'Total Users'],
+            datasets: [{
+                label: 'User Distribution',
+                data: [5, 0, 5, 0, 5],
+                backgroundColor: ['#FF9900', '#232F3E', '#FF9900', '#232F3E', '#FF9900']
+            }]
+        };
+
+        // Create the chart
+        const ctx = document.getElementById('userDistribution').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: userData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'MySQL User Distribution'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

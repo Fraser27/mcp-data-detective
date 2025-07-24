@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySQL User Distribution Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 p-4">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold mb-4 text-center text-gray-800">MySQL User Distribution Dashboard</h1>
+        <p class="text-center text-gray-600 mb-6">A comprehensive view of MySQL user activity status</p>
+        <p class="text-sm text-gray-500 mb-6 text-center">Generated on: <span id="timestamp"></span></p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Pie Chart -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">User Distribution</h2>
+                <canvas id="pieChart"></canvas>
+            </div>
+
+            <!-- Bar Chart -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">User Activity Comparison</h2>
+                <canvas id="barChart"></canvas>
+            </div>
+
+            <!-- Gauge Chart -->
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Active Users Percentage</h2>
+                <canvas id="gaugeChart"></canvas>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center">
+            <button id="exportBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                Export Charts
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Set timestamp
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+
+        // Pie Chart
+        const pieCtx = document.getElementById('pieChart').getContext('2d');
+        new Chart(pieCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Active Users', 'Inactive Users'],
+                datasets: [{
+                    data: [5, 0],
+                    backgroundColor: ['#4CAF50', '#F44336'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed !== null) {
+                                    label += context.parsed;
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Bar Chart
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Active Users', 'Inactive Users'],
+                datasets: [{
+                    label: 'Number of Users',
+                    data: [5, 0],
+                    backgroundColor: ['#4CAF50', '#F44336'],
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Gauge Chart
+        const gaugeCtx = document.getElementById('gaugeChart').getContext('2d');
+        new Chart(gaugeCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Active', 'Inactive'],
+                datasets: [{
+                    data: [100, 0],
+                    backgroundColor: ['#4CAF50', '#ECEFF1'],
+                    circumference: 180,
+                    rotation: 270,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return 'Active Users: 100%';
+                            }
+                        }
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+
+        // Export functionality
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            const charts = document.querySelectorAll('canvas');
+            charts.forEach((chart, index) => {
+                const link = document.createElement('a');
+                link.download = `chart-${index + 1}.png`;
+                link.href = chart.toDataURL('image/png');
+                link.click();
+            });
+        });
+    </script>
+</body>
+</html>

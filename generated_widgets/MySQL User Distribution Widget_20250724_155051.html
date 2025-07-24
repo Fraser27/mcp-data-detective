@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySQL User Distribution Widget</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-inter p-4">
+    <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-lg p-6">
+        <header class="mb-4">
+            <h1 class="text-2xl font-bold text-gray-800">MySQL User Distribution</h1>
+            <p class="text-sm text-gray-500">Snapshot of user profile completeness and activity status</p>
+        </header>
+
+        <div class="flex justify-between items-center mb-4">
+            <div class="text-xs text-gray-400">
+                Generated: <span id="timestamp"></span>
+            </div>
+        </div>
+
+        <div class="relative h-64">
+            <canvas id="userDistributionChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // Set timestamp
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+
+        // Chart configuration
+        const ctx = document.getElementById('userDistributionChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Active Users', 'Inactive Users', 'Complete Profiles', 'Incomplete Profiles', 'Total Users'],
+                datasets: [{
+                    data: [5, 0, 5, 0, 5],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.8)',   // Active Users - Teal
+                        'rgba(255, 99, 132, 0.8)',   // Inactive Users - Pink
+                        'rgba(54, 162, 235, 0.8)',   // Complete Profiles - Blue
+                        'rgba(255, 206, 86, 0.8)',   // Incomplete Profiles - Yellow
+                        'rgba(153, 102, 255, 0.8)'   // Total Users - Purple
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.formattedValue}`;
+                            }
+                        }
+                    },
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                size: 10
+                            }
+                        }
+                    }
+                },
+                accessibility: {
+                    enabled: true,
+                    descrip: 'Pie chart showing MySQL user distribution'
+                }
+            }
+        });
+    </script>
+</body>
+</html>

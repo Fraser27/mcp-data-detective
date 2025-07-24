@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top 10 Products by Sales Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Top 10 Products by Sales</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white p-4 rounded shadow">
+                <h2 class="text-lg font-semibold mb-2">Sales Distribution</h2>
+                <div>
+                    <canvas id="pieChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="bg-white p-4 rounded shadow">
+                <h2 class="text-lg font-semibold mb-2">Product Sales Details</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3">Rank</th>
+                                <th class="px-6 py-3">ID</th>
+                                <th class="px-6 py-3">Name</th>
+                                <th class="px-6 py-3">Total Sales</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-white border-b">
+                                <td class="px-6 py-4">1</td>
+                                <td class="px-6 py-4">1</td>
+                                <td class="px-6 py-4">Laptop Pro</td>
+                                <td class="px-6 py-4">$1,299.99</td>
+                            </tr>
+                            <tr class="bg-gray-50 border-b">
+                                <td class="px-6 py-4">2</td>
+                                <td class="px-6 py-4">3</td>
+                                <td class="px-6 py-4">Office Chair</td>
+                                <td class="px-6 py-4">$199.99</td>
+                            </tr>
+                            <tr class="bg-white border-b">
+                                <td class="px-6 py-4">3</td>
+                                <td class="px-6 py-4">7</td>
+                                <td class="px-6 py-4">Keyboard</td>
+                                <td class="px-6 py-4">$89.99</td>
+                            </tr>
+                            <tr class="bg-gray-50 border-b">
+                                <td class="px-6 py-4">4</td>
+                                <td class="px-6 py-4">2</td>
+                                <td class="px-6 py-4">Wireless Mouse</td>
+                                <td class="px-6 py-4">$59.98</td>
+                            </tr>
+                            <tr class="bg-white border-b">
+                                <td class="px-6 py-4">5</td>
+                                <td class="px-6 py-4">6</td>
+                                <td class="px-6 py-4">Desk Lamp</td>
+                                <td class="px-6 py-4">$49.99</td>
+                            </tr>
+                            <tr class="bg-gray-50 border-b">
+                                <td class="px-6 py-4">6</td>
+                                <td class="px-6 py-4">4</td>
+                                <td class="px-6 py-4">Coffee Mug</td>
+                                <td class="px-6 py-4">$25.98</td>
+                            </tr>
+                            <tr class="bg-white">
+                                <td class="px-6 py-4">7</td>
+                                <td class="px-6 py-4">8</td>
+                                <td class="px-6 py-4">Water Bottle</td>
+                                <td class="px-6 py-4">$19.99</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const pieCtx = document.getElementById('pieChart').getContext('2d');
+        new Chart(pieCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Laptop Pro', 'Office Chair', 'Keyboard', 'Wireless Mouse', 'Desk Lamp', 'Coffee Mug', 'Water Bottle'],
+                datasets: [{
+                    data: [1299.99, 199.99, 89.99, 59.98, 49.99, 25.98, 19.99],
+                    backgroundColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF6384'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Product Sales Distribution'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

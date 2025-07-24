@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraser-360 Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <header class="mb-8">
+            <div class="flex justify-between items-center">
+                <img src="https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png" alt="AWS Logo" class="h-8">
+                <h1 class="text-3xl font-bold text-center">Fraser-360 Dashboard</h1>
+                <button id="exportButton" class="bg-blue-500 text-white px-4 py-2 rounded">Export HTML</button>
+            </div>
+            <p class="text-center text-gray-600 mt-2">A comprehensive overview of Fraser Sequeira's professional activities across various platforms</p>
+            <p class="text-center text-sm text-gray-500 mt-2">Generated on: <span id="timestamp"></span></p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">Platform Activity Distribution</h2>
+                <canvas id="platformChart"></canvas>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">LinkedIn Top Posts</h2>
+                <table class="w-full">
+                    <thead>
+                        <tr>
+                            <th class="text-left">Title</th>
+                            <th class="text-left">Reactions</th>
+                            <th class="text-left">Comments</th>
+                        </tr>
+                    </thead>
+                    <tbody id="linkedinTable"></tbody>
+                </table>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">GitHub Repositories (aws-samples)</h2>
+                <canvas id="githubChart"></canvas>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">AWS Blog Posts</h2>
+                <ul id="awsBlogList" class="list-disc pl-5"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set timestamp
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+
+        // Platform Activity Chart
+        const platformCtx = document.getElementById('platformChart').getContext('2d');
+        new Chart(platformCtx, {
+            type: 'pie',
+            data: {
+                labels: ['AWS Blogs', 'Medium', 'LinkedIn', 'GitHub'],
+                datasets: [{
+                    data: [3, 1, 5, 5],
+                    backgroundColor: ['#FF9900', '#00AB6C', '#0A66C2', '#24292E']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + ' activities';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // LinkedIn Top Posts Table
+        const linkedinData = [
+            { title: "AWSBuilders Online Series", reactions: 94, comments: 6 },
+            { title: "AWS Bangalore Summit 2024", reactions: 148, comments: 0 },
+            { title: "Amazon OpenSearch Service 101", reactions: 32, comments: 8 },
+            { title: "Multi-Agent Architecture with AWS Strands SDK", reactions: 33, comments: 1 },
+            { title: "Agentic AI with AWS", reactions: 27, comments: 0 }
+        ];
+        const linkedinTableBody = document.getElementById('linkedinTable');
+        linkedinData.forEach(post => {
+            const row = linkedinTableBody.insertRow();
+            row.insertCell(0).textContent = post.title;
+            row.insertCell(1).textContent = post.reactions;
+            row.insertCell(2).textContent = post.comments;
+        });
+
+        // GitHub Repositories Chart
+        const githubCtx = document.getElementById('githubChart').getContext('2d');
+        new Chart(githubCtx, {
+            type: 'bar',
+            data: {
+                labels: ['serverless-rag-demo', 'amazon-serverless-datalake-workshop', 'aws-rekognition-liveness-detection', 'serverless-datalake'],
+                datasets: [{
+                    label: 'Stars',
+                    data: [198, 158, 18, 13],
+                    backgroundColor: '#FF9900'
+                }, {
+                    label: 'Forks',
+                    data: [59, 80, 19, 7],
+                    backgroundColor: '#232F3E'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                }
+            }
+        });
+
+        // AWS Blog Posts List
+        const awsBlogData = [
+            "Create your first search application with OpenSearch",
+            "Build scalable and serverless RAG workflows with a vector engine for Amazon OpenSearch Serverless and Amazon Bedrock Claude models",
+            "Building a scalable streaming data platform that enables real-time and batch analytics of electric vehicles on AWS"
+        ];
+        const awsBlogList = document.getElementById('awsBlogList');
+        awsBlogData.forEach(post => {
+            const li = document.createElement('li');
+            li.textContent = post;
+            awsBlogList.appendChild(li);
+        });
+
+        // Export functionality
+        document.getElementById('exportButton').addEventListener('click', function() {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Fraser-360_Dashboard.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>

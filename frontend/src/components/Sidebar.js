@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { 
   MessageSquare, 
   BarChart3, 
+  BookOpenCheck,
   Settings, 
   Database, 
   Zap,
@@ -42,6 +43,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, windowWidth }) {
     { name: 'Chat', href: '/chat', icon: MessageSquare },
     { name: 'Dashboard', href: '/dashboard', icon: BarChart3 },
     { name: 'Dashboard History', href: '/dashboard-history', icon: History },
+    { name: 'Report History', href: '/report-history', icon: BookOpenCheck },
   ];
 
   // Fetch MCP server status
@@ -102,52 +104,42 @@ function Sidebar({ sidebarOpen, setSidebarOpen, windowWidth }) {
       <div 
         ref={sidebarRef}
         className={`
-        fixed inset-y-0 left-0 z-50 bg-white shadow-lg transform transition-all duration-300 ease-in-out
-        ${sidebarOpen ? 'w-64 translate-x-0' : 'w-16 -translate-x-48 lg:translate-x-0'}
+        fixed inset-y-0 left-0 z-50 bg-detective-800 shadow-lg transform transition-all duration-300 ease-in-out flex flex-col overflow-hidden
+        ${sidebarOpen ? 'w-64 translate-x-0' : 'w-16 translate-x-0'}
         lg:static lg:inset-0 lg:translate-y-0
       `}>
-        <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
+        <div className="flex items-center justify-between h-16 px-4 border-b border-detective-700 bg-detective-800">
           <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <h1 className={`text-xl font-bold text-gray-900 transition-opacity duration-300 ${
+            <div className="flex-shrink-0 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-detective-accent mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="10" cy="10" r="7" />
+                <line x1="21" y1="21" x2="15" y2="15" />
+              </svg>
+              <h1 className={`text-xl font-bold text-white transition-opacity duration-300 ${
                 sidebarOpen ? 'opacity-100' : 'opacity-0'
               }`}>
                 MCP Data Detective
               </h1>
 
-              <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className={sidebarOpen ? "hidden" : "flex p-2 rounded-md text-gray-400 hover:bg-gray-100"}
-              title={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
-              >
-               {sidebarOpen ? <ChevronLeft className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
-              </button>
+              
               
 
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            {/* Desktop toggle button */}
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className={!sidebarOpen ? "hidden" : "flex p-2 rounded-md text-gray-400 hover:bg-gray-100"}
-              title={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
-            >
-              {sidebarOpen ? <ChevronLeft className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
-            </button>
             {/* Mobile close button */}
             <button
               onClick={() => setSidebarOpen(false)}
-              className="lg:hidden p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
+              className="lg:hidden p-2 rounded-md text-detective-accent hover:text-detective-accent/80 hover:bg-detective-700"
             >
               <X className="h-6 w-6" />
             </button>
           </div>
         </div>
 
-        <div className="flex-1 flex flex-col overflow-y-auto">
+        <div className={`flex flex-col min-h-0 ${sidebarOpen ? 'overflow-y-auto' : 'overflow-hidden'}`}>
           {/* Navigation */}
-          <nav className="flex-1 px-2 py-4 space-y-1">
+          <nav className="px-2 py-4 space-y-1">
             {navigation.map((item) => {
               const isActive = location.pathname === item.href;
               return (
@@ -157,8 +149,8 @@ function Sidebar({ sidebarOpen, setSidebarOpen, windowWidth }) {
                   className={`
                     group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors
                     ${isActive 
-                      ? 'bg-primary-100 text-primary-700' 
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      ? 'bg-detective-700 text-white border-l-2 border-detective-accent' 
+                      : 'text-gray-300 hover:bg-detective-700/50 hover:text-white'
                     }
                   `}
                   onClick={(e) => {
@@ -170,7 +162,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, windowWidth }) {
                   <item.icon className={`
                     h-5 w-5 flex-shrink-0
                     ${sidebarOpen ? 'mr-3' : 'mx-auto'}
-                    ${isActive ? 'text-primary-500' : 'text-gray-400 group-hover:text-gray-500'}
+                    ${isActive ? 'text-detective-accent' : 'text-gray-400 group-hover:text-detective-accent/80'}
                   `} />
                   <span className={`transition-opacity duration-300 ${
                     sidebarOpen ? 'opacity-100' : 'opacity-0'
@@ -183,42 +175,46 @@ function Sidebar({ sidebarOpen, setSidebarOpen, windowWidth }) {
           </nav>
 
           {/* MCP Server Status */}
-          <div className={`border-t border-gray-200 transition-all duration-300 ${
+          <div className={`border-t border-detective-700 transition-all duration-300 bg-detective-800 ${
             sidebarOpen ? 'p-4' : 'p-2'
           }`}>
-            <div className={`flex items-center justify-between mb-3 ${
+            
+            {sidebarOpen && (
+            <div className={`flex items-center justify-between mb-1 ${
               !sidebarOpen ? 'justify-center' : ''
             }`}>
-              <h3 className={`text-xs font-semibold text-gray-500 uppercase tracking-wider transition-opacity duration-300 ${
+            
+              <h3 className={`text-xs font-semibold text-gray-300 uppercase tracking-wider transition-opacity duration-300 ${
                 sidebarOpen ? 'opacity-100' : 'opacity-0'
               }`}>
                 MCP Servers
               </h3>
+            
               <button
                 onClick={fetchMcpStatus}
                 disabled={isLoading}
-                className={`p-1 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 disabled:opacity-50 ${
+                className={`p-1 rounded-md text-detective-accent hover:text-detective-accent/80 hover:bg-detective-700 disabled:opacity-50 ${
                   !sidebarOpen ? 'mx-auto' : ''
                 }`}
                 title="Refresh status"
               >
                 <RefreshCw className={`h-3 w-3 ${isLoading ? 'animate-spin' : ''}`} />
-              </button>
-            </div>
-            <div className="space-y-2">
+              </button> 
+            </div> )}
+            <div className="space-y-1">
               {mcpServers.map((server) => (
                 <div key={server.id} className={`flex items-center justify-between ${
                   !sidebarOpen ? 'justify-center' : ''
                 }`}>
                   <div className="flex items-center">
-                    <server.icon className={`h-4 w-4 text-gray-400 ${
+                    <server.icon className={`h-4 w-4 text-detective-accent ${
                       sidebarOpen ? 'mr-2' : 'mx-auto'
                     }`} />
                     <div className={`transition-opacity duration-300 ${
                       sidebarOpen ? 'opacity-100' : 'opacity-0'
                     }`}>
-                      <span className="text-sm text-gray-700">{server.name}</span>
-                      <div className="text-xs text-gray-500">Port {server.port}</div>
+                      <span className="text-sm text-gray-300">{server.name}</span>
+                      <div className="text-xs text-gray-400">Port {server.port}</div>
                     </div>
                   </div>
                   <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium transition-opacity duration-300 ${
@@ -231,7 +227,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, windowWidth }) {
                 </div>
               ))}
             </div>
-            {lastUpdated && (
+            {sidebarOpen && lastUpdated && (
               <div className={`mt-2 text-xs text-gray-400 transition-opacity duration-300 ${
                 sidebarOpen ? 'opacity-100' : 'opacity-0'
               }`}>
@@ -241,15 +237,15 @@ function Sidebar({ sidebarOpen, setSidebarOpen, windowWidth }) {
           </div>
 
           {/* Settings */}
-          <div className={`border-t border-gray-200 transition-all duration-300 ${
+          <div className={`border-t border-detective-700 transition-all duration-300 bg-detective-800 ${
             sidebarOpen ? 'p-4' : 'p-2'
           }`}>
-            <Link
+            {/* <Link
               to="/settings"
-              className="group flex items-center px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900"
+              className="group flex items-center px-2 py-2 text-sm font-medium text-gray-300 rounded-md hover:bg-detective-700/50 hover:text-white"
               title={!sidebarOpen ? 'Settings' : ''}
             >
-              <Settings className={`h-5 w-5 text-gray-400 group-hover:text-gray-500 ${
+              <Settings className={`h-5 w-5 text-detective-accent group-hover:text-detective-accent/80 ${
                 sidebarOpen ? 'mr-3' : 'mx-auto'
               }`} />
               <span className={`transition-opacity duration-300 ${
@@ -257,7 +253,18 @@ function Sidebar({ sidebarOpen, setSidebarOpen, windowWidth }) {
               }`}>
                 Settings
               </span>
-            </Link>
+            </Link> */}
+            
+            {/* Toggle sidebar button at bottom */}
+            <div className="mt-4 flex bg-detective-800" style={{"justify-content":"right"}}>
+              <button
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="p-2 rounded-md text-detective-accent hover:bg-detective-700 transition-colors"
+                title={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+              >
+                {sidebarOpen ? <ChevronLeft className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -266,7 +273,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen, windowWidth }) {
       <div className="lg:hidden fixed top-4 left-4 z-50">
         <button
           onClick={() => setSidebarOpen(true)}
-          className="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 bg-white shadow-lg"
+          className="p-2 rounded-md text-detective-accent hover:text-detective-accent/80 bg-detective-800 shadow-lg"
         >
           <Menu className="h-6 w-6" />
         </button>

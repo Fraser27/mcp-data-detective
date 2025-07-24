@@ -221,6 +221,20 @@ export function ChatProvider({ children }) {
         dispatch({ type: 'SET_LOADING', payload: false });
         break;
         
+      case 'html_content':
+        dispatch({
+          type: 'UPDATE_LAST_MESSAGE',
+          payload: {
+            htmlContent: data.content,
+            metadata: data.metadata,
+            htmlContentTitle: data.title || "Analysis Report",
+            isLoading: false,
+          }
+        });
+        // Reset global loading state
+        dispatch({ type: 'SET_LOADING', payload: false });
+        break;
+        
       case 'dashboard_file':
         dispatch({
           type: 'UPDATE_LAST_MESSAGE',

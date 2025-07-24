@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Management Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-center text-gray-800">Device Management Dashboard</h1>
+            <p class="text-center text-gray-600" id="timestamp"></p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4">Device Types Distribution</h2>
+                <select id="chart1Type" class="mb-4 p-2 border rounded">
+                    <option value="pie">Pie Chart</option>
+                    <option value="bar">Bar Chart</option>
+                    <option value="doughnut">Doughnut Chart</option>
+                </select>
+                <canvas id="chart1"></canvas>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4">Devices Needing Maintenance</h2>
+                <select id="chart2Type" class="mb-4 p-2 border rounded">
+                    <option value="pie">Pie Chart</option>
+                    <option value="bar">Bar Chart</option>
+                    <option value="doughnut">Doughnut Chart</option>
+                </select>
+                <canvas id="chart2"></canvas>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4">Online Devices</h2>
+                <select id="chart3Type" class="mb-4 p-2 border rounded">
+                    <option value="pie">Pie Chart</option>
+                    <option value="bar">Bar Chart</option>
+                    <option value="doughnut">Doughnut Chart</option>
+                </select>
+                <canvas id="chart3"></canvas>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4">Recent Installations</h2>
+                <div class="overflow-x-auto">
+                    <table id="recentInstallations" class="min-w-full bg-white">
+                        <thead>
+                            <tr>
+                                <th class="py-2 px-4 border-b">Device ID</th>
+                                <th class="py-2 px-4 border-b">Type</th>
+                                <th class="py-2 px-4 border-b">Installation Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Table rows will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center">
+            <button id="downloadBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Download Dashboard
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Chart data
+        const deviceTypesData = {
+            labels: ['DISPENSER', 'POS', 'TANK-GAUGE'],
+            datasets: [{
+                data: [7, 6, 1],
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+            }]
+        };
+
+        const maintenanceData = {
+            labels: ['Needs Maintenance', 'No Maintenance Needed'],
+            datasets: [{
+                data: [14, 0],
+                backgroundColor: ['#FF6384', '#36A2EB']
+            }]
+        };
+
+        const onlineDevicesData = {
+            labels: ['Online', 'Offline'],
+            datasets: [{
+                data: [1, 1],
+                backgroundColor: ['#36A2EB', '#FF6384']
+            }]
+        };
+
+        // Function to create or update chart
+        function createChart(canvasId, chartType, data) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            if (window[canvasId]) {
+                window[canvasId].destroy();
+            }
+            window[canvasId] = new Chart(ctx, {
+                type: chartType,
+                data: data,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: false,
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initial chart creation
+        createChart('chart1', 'pie', deviceTypesData);
+        createChart('chart2', 'pie', maintenanceData);
+        createChart('chart3', 'pie', onlineDevicesData);
+
+        // Event listeners for chart type changes
+        document.getElementById('chart1Type').addEventListener('change', (e) => {
+            createChart('chart1', e.target.value, deviceTypesData);
+        });
+
+        document.getElementById('chart2Type').addEventListener('change', (e) => {
+            createChart('chart2', e.target.value, maintenanceData);
+        });
+
+        document.getElementById('chart3Type').addEventListener('change', (e) => {
+            createChart('chart3', e.target.value, onlineDevicesData);
+        });
+
+        // Set timestamp
+        const timestamp = new Date().toLocaleString();
+        document.getElementById('timestamp').textContent = `Generated on: ${timestamp}`;
+
+        // Download functionality
+        document.getElementById('downloadBtn').addEventListener('click', () => {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'device_management_dashboard.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        // Sample data for recent installations table
+        const recentInstallations = [
+            { id: 'DEV001', type: 'DISPENSER', date: '2023-05-01' },
+            { id: 'DEV002', type: 'POS', date: '2023-05-03' },
+            { id: 'DEV003', type: 'TANK-GAUGE', date: '2023-05-05' },
+        ];
+
+        // Populate recent installations table
+        const tableBody = document.querySelector('#recentInstallations tbody');
+        recentInstallations.forEach(installation => {
+            const row = tableBody.insertRow();
+            row.insertCell(0).textContent = installation.id;
+            row.insertCell(1).textContent = installation.type;
+            row.insertCell(2).textContent = installation.date;
+        });
+    </script>
+</body>
+</html>

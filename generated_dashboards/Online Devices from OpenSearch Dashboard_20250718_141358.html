@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Devices from OpenSearch Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @media print {
+            body { font-size: 12pt; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-center text-gray-800">Online Devices from OpenSearch</h1>
+            <p class="text-center text-gray-600 mt-2">Generated on <span id="timestamp"></span></p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4">Index Summary</h2>
+                <table class="w-full">
+                    <tbody>
+                        <tr>
+                            <td class="py-2 font-semibold">Index Name</td>
+                            <td class="py-2">device_status</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-semibold">Total Documents</td>
+                            <td class="py-2">2</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-semibold">Available Fields</td>
+                            <td class="py-2">device_id, event_id, last_heartbeat, maintenance_required, site_id, status, timestamp</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-semibold">Status</td>
+                            <td class="py-2 text-red-600">Unable to query for online devices due to search function error</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4">Device Details</h2>
+                <table class="w-full">
+                    <tbody>
+                        <tr>
+                            <td class="py-2 font-semibold">Device ID</td>
+                            <td class="py-2">DEV_001</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-semibold">Site ID</td>
+                            <td class="py-2">SITE_001</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-semibold">Status</td>
+                            <td class="py-2 text-green-600">online</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-semibold">Last Heartbeat</td>
+                            <td class="py-2">2025-07-09T10:30:00Z</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 font-semibold">Maintenance Required</td>
+                            <td class="py-2">false</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4">Device Status</h2>
+                <div class="flex justify-between items-center mb-4">
+                    <select id="chartTypeSelect" class="border rounded p-2">
+                        <option value="pie">Pie Chart</option>
+                        <option value="doughnut">Doughnut Chart</option>
+                    </select>
+                </div>
+                <canvas id="deviceStatusChart"></canvas>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center">
+            <button id="downloadBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded no-print">
+                Download Dashboard
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Set timestamp
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+
+        // Device Status Chart
+        const ctx = document.getElementById('deviceStatusChart').getContext('2d');
+        let deviceStatusChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Online'],
+                datasets: [{
+                    data: [100],
+                    backgroundColor: ['#10B981'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Device Status'
+                    }
+                }
+            }
+        });
+
+        // Chart type change event listener
+        document.getElementById('chartTypeSelect').addEventListener('change', function(e) {
+            deviceStatusChart.destroy();
+            deviceStatusChart = new Chart(ctx, {
+                type: e.target.value,
+                data: deviceStatusChart.data,
+                options: deviceStatusChart.options
+            });
+        });
+
+        // Download button functionality
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'dashboard.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>

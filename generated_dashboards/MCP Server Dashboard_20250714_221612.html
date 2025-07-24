@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP Server Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8 text-center">MCP Server Dashboard</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Device Count -->
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">Device Count</h2>
+                <table class="w-full">
+                    <tr>
+                        <td class="font-medium">Total Devices:</td>
+                        <td class="text-right">84</td>
+                    </tr>
+                    <tr>
+                        <td class="font-medium">Device Types:</td>
+                        <td class="text-right">3</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Device Types Distribution -->
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">Device Types Distribution</h2>
+                <canvas id="deviceTypesChart"></canvas>
+            </div>
+
+            <!-- Recent Installations -->
+            <div class="bg-white p-6 rounded-lg shadow md:col-span-2">
+                <h2 class="text-xl font-semibold mb-4">Recent Installations</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full table-auto">
+                        <thead>
+                            <tr class="bg-gray-200">
+                                <th class="px-4 py-2">Device ID</th>
+                                <th class="px-4 py-2">Type</th>
+                                <th class="px-4 py-2">Installation Date</th>
+                                <th class="px-4 py-2">Site</th>
+                                <th class="px-4 py-2">Organization</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border px-4 py-2">DEV_084</td>
+                                <td class="border px-4 py-2">TANK-GUAGE</td>
+                                <td class="border px-4 py-2">2024-02-28</td>
+                                <td class="border px-4 py-2">Wayne Fueling Systems Sacramento</td>
+                                <td class="border px-4 py-2">Wayne Fueling Systems</td>
+                            </tr>
+                            <tr class="bg-gray-100">
+                                <td class="border px-4 py-2">DEV_083</td>
+                                <td class="border px-4 py-2">POS</td>
+                                <td class="border px-4 py-2">2024-02-28</td>
+                                <td class="border px-4 py-2">Wayne Fueling Systems Sacramento</td>
+                                <td class="border px-4 py-2">Wayne Fueling Systems</td>
+                            </tr>
+                            <tr>
+                                <td class="border px-4 py-2">DEV_082</td>
+                                <td class="border px-4 py-2">DISPENSER</td>
+                                <td class="border px-4 py-2">2024-02-28</td>
+                                <td class="border px-4 py-2">Wayne Fueling Systems Sacramento</td>
+                                <td class="border px-4 py-2">Wayne Fueling Systems</td>
+                            </tr>
+                            <tr class="bg-gray-100">
+                                <td class="border px-4 py-2">DEV_080</td>
+                                <td class="border px-4 py-2">POS</td>
+                                <td class="border px-4 py-2">2024-01-15</td>
+                                <td class="border px-4 py-2">Gilbarco Veeder-Root Bronx</td>
+                                <td class="border px-4 py-2">Gilbarco Veeder-Root</td>
+                            </tr>
+                            <tr>
+                                <td class="border px-4 py-2">DEV_081</td>
+                                <td class="border px-4 py-2">TANK-GUAGE</td>
+                                <td class="border px-4 py-2">2024-01-15</td>
+                                <td class="border px-4 py-2">Gilbarco Veeder-Root Bronx</td>
+                                <td class="border px-4 py-2">Gilbarco Veeder-Root</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Devices Needing Maintenance -->
+            <div class="bg-white p-6 rounded-lg shadow md:col-span-2">
+                <h2 class="text-xl font-semibold mb-4">Devices Needing Maintenance</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full table-auto">
+                        <thead>
+                            <tr class="bg-gray-200">
+                                <th class="px-4 py-2">Device ID</th>
+                                <th class="px-4 py-2">Type</th>
+                                <th class="px-4 py-2">Last Maintenance</th>
+                                <th class="px-4 py-2">Site</th>
+                                <th class="px-4 py-2">Organization</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border px-4 py-2">DEV_002</td>
+                                <td class="border px-4 py-2">DISPENSER</td>
+                                <td class="border px-4 py-2">2023-06-10</td>
+                                <td class="border px-4 py-2">Shell Downtown Phoenix</td>
+                                <td class="border px-4 py-2">Shell</td>
+                            </tr>
+                            <tr class="bg-gray-100">
+                                <td class="border px-4 py-2">DEV_003</td>
+                                <td class="border px-4 py-2">POS</td>
+                                <td class="border px-4 py-2">2023-06-10</td>
+                                <td class="border px-4 py-2">Shell Downtown Phoenix</td>
+                                <td class="border px-4 py-2">Shell</td>
+                            </tr>
+                            <tr>
+                                <td class="border px-4 py-2">DEV_004</td>
+                                <td class="border px-4 py-2">TANK-GUAGE</td>
+                                <td class="border px-4 py-2">2023-06-10</td>
+                                <td class="border px-4 py-2">Shell Downtown Phoenix</td>
+                                <td class="border px-4 py-2">Shell</td>
+                            </tr>
+                            <tr class="bg-gray-100">
+                                <td class="border px-4 py-2">DEV_001</td>
+                                <td class="border px-4 py-2">DISPENSER</td>
+                                <td class="border px-4 py-2">2023-06-10</td>
+                                <td class="border px-4 py-2">Shell Downtown Phoenix</td>
+                                <td class="border px-4 py-2">Shell</td>
+                            </tr>
+                            <tr>
+                                <td class="border px-4 py-2">DEV_005</td>
+                                <td class="border px-4 py-2">DISPENSER</td>
+                                <td class="border px-4 py-2">2023-07-15</td>
+                                <td class="border px-4 py-2">Shell Scottsdale Station</td>
+                                <td class="border px-4 py-2">Shell</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center">
+            <p class="text-sm text-gray-600">Dashboard generated on: <span id="timestamp"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // Device Types Distribution Chart
+        const ctx = document.getElementById('deviceTypesChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['DISPENSER', 'POS', 'TANK-GUAGE'],
+                datasets: [{
+                    data: [32, 26, 26],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Device Types Distribution'
+                    }
+                }
+            }
+        });
+
+        // Set timestamp
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+    </script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serverless RAG Demo Repository Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-6 text-center">Serverless RAG Demo Repository Dashboard</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">Repository Details</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full table-auto">
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="py-2 pr-4 font-medium">Repository Name</td>
+                                <td class="py-2">serverless-rag-demo</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-2 pr-4 font-medium">Owner</td>
+                                <td class="py-2">aws-samples</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-2 pr-4 font-medium">Description</td>
+                                <td class="py-2">Amazon Bedrock Foundation models with Amazon Opensearch Serverless as a Vector DB</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-2 pr-4 font-medium">Primary Language</td>
+                                <td class="py-2">Python</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-2 pr-4 font-medium">License</td>
+                                <td class="py-2">MIT-0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4">Repository Popularity</h2>
+                <canvas id="popularityChart"></canvas>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow md:col-span-2">
+                <h2 class="text-xl font-semibold mb-4">Main Features</h2>
+                <canvas id="featuresChart"></canvas>
+            </div>
+        </div>
+
+        <div class="mt-8 text-center">
+            <p class="text-sm text-gray-600">Dashboard generated on: <span id="timestamp"></span></p>
+        </div>
+    </div>
+
+    <script>
+        // Popularity Chart
+        const popularityCtx = document.getElementById('popularityChart').getContext('2d');
+        new Chart(popularityCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Stars', 'Forks'],
+                datasets: [{
+                    data: [198, 59],
+                    backgroundColor: ['#4299E1', '#48BB78']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Repository Popularity'
+                    }
+                }
+            }
+        });
+
+        // Features Chart
+        const featuresCtx = document.getElementById('featuresChart').getContext('2d');
+        new Chart(featuresCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Document chat', 'Multi-Agent collaboration', 'Sentiment Analysis', 'PII Redaction', 'OCR'],
+                datasets: [{
+                    data: [1, 1, 1, 1, 1],
+                    backgroundColor: ['#4299E1', '#48BB78', '#ECC94B', '#ED64A6', '#9F7AEA']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Main Features'
+                    }
+                }
+            }
+        });
+
+        // Set timestamp
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+    </script>
+</body>
+</html>

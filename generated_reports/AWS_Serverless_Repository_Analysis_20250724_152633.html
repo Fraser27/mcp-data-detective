@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Serverless Repository Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #232F3E;
+            color: #FF9900;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            height: 30px;
+        }
+        h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+        main {
+            padding: 20px;
+        }
+        .section {
+            background-color: #f1f1f1;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .section h2 {
+            color: #232F3E;
+            margin-top: 0;
+        }
+        .chart-container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+        footer {
+            background-color: #232F3E;
+            color: #FF9900;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="https://via.placeholder.com/150x30" alt="AWS Logo" class="logo">
+        <h1>AWS Serverless Repository Analysis</h1>
+    </header>
+
+    <main>
+        <div class="section">
+            <h2>Executive Summary</h2>
+            <p>The "serverless-rag-demo" repository, owned by AWS Samples, is a Python-based project that showcases the integration of Amazon Bedrock Foundation models with Amazon OpenSearch Serverless as a Vector DB. The repository has 198 stars and 59 forks, indicating a moderate level of community interest and engagement.</p>
+        </div>
+
+        <div class="section">
+            <h2>Key Insights</h2>
+            <div class="chart-container">
+                <canvas id="branchesChart"></canvas>
+            </div>
+            <p>The repository has 7 active branches, with the "main" branch being the primary development branch. The key features of the project include document chat, multi-agent collaboration, sentiment analysis, PII redaction, and OCR.</p>
+            <div class="chart-container">
+                <canvas id="commitsChart"></canvas>
+            </div>
+            <p>The latest commits were made by Fraser Sequeira and fraseque, with the most recent commit on June 18, 2025.</p>
+        </div>
+
+        <div class="section">
+            <h2>Actionable Recommendations</h2>
+            <ol>
+                <li>Encourage community engagement and contribution by highlighting the project's key features and use cases in project documentation and marketing materials.</li>
+                <li>Prioritize the development of the "main" branch and ensure regular updates and bug fixes to maintain the project's stability and reliability.</li>
+                <li>Explore opportunities to integrate the project's capabilities with other AWS services or third-party tools to expand its potential use cases and customer base.</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>Risk Assessment</h2>
+            <p>The project has a relatively small number of contributors, which could potentially lead to maintenance and development challenges if key team members become unavailable. Additionally, the use of Amazon Bedrock and Cohere models as prerequisites may limit the project's accessibility to some customers.</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 AWS. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Branch chart
+        new Chart(document.getElementById('branchesChart'), {
+            type: 'bar',
+            data: {
+                labels: ['feature-save-chat-history', 'feature-v1.1.0', 'main', 'older-agents-implementation', 'strands', 'v0.0.1(Old-UI)', 'v1.1.0'],
+                datasets: [{
+                    label: 'Branches',
+                    data: [1, 1, 1, 1, 1, 1, 1],
+                    backgroundColor: '#FF9900'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Repository Branches'
+                    }
+                }
+            }
+        });
+
+        // Commit chart
+        new Chart(document.getElementById('commitsChart'), {
+            type: 'line',
+            data: {
+                labels: ['2025-06-18', '2025-06-10', '2025-06-10'],
+                datasets: [{
+                    label: 'Commits',
+                    data: [1, 2, 1],
+                    backgroundColor: '#FF9900',
+                    borderColor: '#FF9900',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Recent Commits'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
