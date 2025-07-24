@@ -19,7 +19,15 @@ from strands.session.file_session_manager import FileSessionManager
 import time
 import pathlib
 # Configure logging
-logging.basicConfig(level=logging.ERROR)
+import sys
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout),
+        logging.FileHandler("logs/database_mcp_clients.log")
+    ]
+)
 logger = logging.getLogger(__name__)
 
 import json
@@ -42,6 +50,7 @@ class JsonFormatter(logging.Formatter):
 # # Enable DEBUG logs for the tool registry only
 # logger = logging.getLogger("strands")
 # logger.addHandler(file_handler)
+# Set logger level to INFO to see all information up to errors
 logger.setLevel(logging.INFO)
 
 os.environ["LANGFUSE_PUBLIC_KEY"] = "pk-lf-d4a5e154-f83a-4d39-a0a4-f9ec18efbcc0"
@@ -93,10 +102,11 @@ class MCPClientChatbot:
         self.stream_callback = stream_callback
         self.mcp_clients = {}
         self.model = BedrockModel(
-            model_id="us.anthropic.claude-3-5-sonnet-20240620-v1:0"
+            model_id="us.anthropic.claude-3-5-haiku-20241022-v1:0"
+            #model_id="us.anthropic.claude-3-5-sonnet-20240620-v1:0"
         )
         self.cheaper_model = BedrockModel(
-            model_id="anthropic.claude-3-haiku-20240307-v1:0"
+            model_id="us.anthropic.claude-3-5-haiku-20241022-v1:0"
         )
         self.agent = None
         self.orchestrator_agent = None
@@ -470,12 +480,15 @@ class MCPClientChatbot:
         end_index = text.rfind('}') + 1  # +1 to include the '}'
         
         if start_index == -1 or end_index == 0:  # if '{' or '}' not found
+            logger.warning("No JSON object found in text")
             return None
         
         # Extract the JSON string
         json_str = text[start_index:end_index]
+        logger.info(f"Extracted JSON string of length {len(json_str)}")
         
         # Fix common JSON syntax errors
+        logger.info("Attempting to fix common JSON syntax errors")
         
         # 1. Fix trailing commas in arrays/objects
         lines = json_str.split('\n')
@@ -487,16 +500,27 @@ class MCPClientChatbot:
         # 2. Fix the mismatched brackets (closing array with '}' instead of ']')
         # This is a simple fix for this specific error
         if "}" in json_str and json_str.count('{') > json_str.count('}'):
+            logger.info("Fixing mismatched brackets")
             json_str = json_str.replace('}', ']')
+        
+        # 3. Check for and remove control characters
+        cleaned_json = ''
+        for char in json_str:
+            if ord(char) >= 32 or char in '\n\r\t':
+                cleaned_json += char
+            else:
+                logger.info(f"Removing control character: {ord(char)}")
         
         try:
             # Parse the JSON
-            json_data = json.loads(json_str)
+            json_data = json.loads(cleaned_json)
+            logger.info("Successfully parsed JSON")
             return json_data
         except json.JSONDecodeError as e:
-            print(f"Error parsing JSON: {e}")
+            logger.error(f"Error parsing JSON: {e}")
+            logger.debug(f"Problematic JSON: {cleaned_json[:200]}...")
             # If there's an error, you might want to try more sophisticated fixes
-            return json_str
+            return cleaned_json
         
 
     # Function to extract JSON objects from text
@@ -529,11 +553,24 @@ class MCPClientChatbot:
         
     
     def get_json_key(self, input_str_or_json, key):
-        if isinstance(input_str_or_json, dict):
-            return input_str_or_json[key]
-        elif isinstance(input_str_or_json, str):
-            return input_str_or_json.split(f"{key}")[1].split(":")[1].split(",")[0].replace('"', '').strip()
-        else:
+        try:
+            if isinstance(input_str_or_json, dict):
+                return input_str_or_json[key]
+            elif isinstance(input_str_or_json, str):
+                # Try to parse as JSON first
+                try:
+                    json_obj = json.loads(input_str_or_json)
+                    return json_obj.get(key)
+                except json.JSONDecodeError:
+                    # Fall back to string parsing
+                    logger.info(f"Attempting to extract key '{key}' from string using split method")
+                    return input_str_or_json.split(f"{key}")[1].split(":")[1].split(",")[0].replace('"', '').strip()
+            else:
+                logger.warning(f"Unable to extract key '{key}' from {type(input_str_or_json)}")
+                return None
+        except Exception as e:
+            logger.error(f"Error extracting key '{key}' from input: {e}")
+            logger.debug(f"Input data: {input_str_or_json[:200]}..." if isinstance(input_str_or_json, str) else str(input_str_or_json))
             return None
         
 
@@ -1174,20 +1211,26 @@ class MCPClientChatbot:
         html_content = str(response)
        
         file_name = "dashboard"
-        dashboard_dir = "/Users/fraseque/Fraser/Playground/mcp-dashboarding/generated_dashboards"
+        # Use pathlib for relative path
+        current_file = pathlib.Path(__file__)
+        project_root = current_file.parent.parent.parent
+        dashboard_dir = project_root / "generated_dashboards"
         if is_single_widget:
             file_name = "widget"
-            dashboard_dir = "/Users/fraseque/Fraser/Playground/mcp-dashboarding/generated_widgets"
+            # Use pathlib for relative path
+            current_file = pathlib.Path(__file__)
+            project_root = current_file.parent.parent.parent
+            dashboard_dir = project_root / "generated_widgets"
         # extract title from html content
         if '<title>' in html_content and '</title>' in html_content:
             file_name = html_content.split('<title>')[1].split('</title>')[0]
         # Create the directory if it doesn't exist        
-        os.makedirs(dashboard_dir, exist_ok=True)
+        dashboard_dir.mkdir(exist_ok=True, parents=True)
         # Generate a unique filename based on timestamp and query
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"{file_name}_{timestamp}.html"
         # Save the dashboard HTML to file
-        filepath = os.path.join(dashboard_dir, filename)
+        filepath = dashboard_dir / filename
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write(html_content)
             
@@ -1263,6 +1306,7 @@ class MCPClientChatbot:
         timestamp: str = None,
         metadata: dict = None,
         extra: dict = None,
+        title: str = None,
     ):
         """Send streaming updates via callback."""
         if self.stream_callback:
@@ -1280,6 +1324,8 @@ class MCPClientChatbot:
                 update_data["timestamp"] = timestamp
             if metadata:
                 update_data["metadata"] = metadata
+            if title:
+                update_data["title"] = title
             if extra:
                 update_data.update(extra)
             await self.stream_callback(update_data)
@@ -1553,44 +1599,191 @@ class MCPClientChatbot:
                         can_answer = self.get_json_key(verifier_response_str, "can_answer")
                         if can_answer == 'yes':
                             conversation_resolved = True
-                            ba_summarizer_prompt = f"""You are a business analyst whose role is to provide actionable insights and recommendations based on data analysis.
+                            # ba_summarizer_prompt = f"""You are a business analyst whose role is to provide actionable insights and recommendations based on data analysis.
 
-                            **YOUR TASK**: Analyze the following data and provide a clear, actionable summary: {combined_response}
+                            # **YOUR TASK**: Analyze the following data and provide a clear, actionable summary: {combined_response}
                             
-                            **OUTPUT REQUIREMENTS**:
-                            1. **Executive Summary**: Provide a concise overview of key findings
-                            2. **Key Insights**: Extract the most important data points and what they mean for the business
-                            3. **Actionable Recommendations**: Specific steps the business can take based on the data
-                            4. **Risk Assessment**: Identify any concerning trends or issues that need attention
+                            # **OUTPUT REQUIREMENTS**:
+                            # 1. **Executive Summary**: Provide a concise overview of key findings
+                            # 2. **Key Insights**: Extract the most important data points and what they mean for the business
+                            # 3. **Actionable Recommendations**: Specific steps the business can take based on the data
+                            # 4. **Risk Assessment**: Identify any concerning trends or issues that need attention
                             
-                            **STRICT GUIDELINES**:
-                            - **DO NOT ask follow-up questions** - work with the data provided
-                            - **DO NOT request additional context** - analyze what you have
-                            - **FOCUS on actionable insights** that can be implemented immediately
-                            - **Be specific and direct** in your recommendations
-                            - **Quantify impact** where possible using the available data
-                            - **Prioritize recommendations** by urgency or business impact
+                            # **OUTPUT FORMAT**:
+                            # 1. HTML Report with header, footer, AWS logo on top left. Clean professional modern design with charts
                             
-                            **RESPONSE FORMAT**:
+                            # **STRICT GUIDELINES**:
+                            # - **DO NOT ask follow-up questions** - work with the data provided
+                            # - **DO NOT request additional context** - analyze what you have
+                            # - **FOCUS on actionable insights** that can be implemented immediately
+                            # - **Be specific and direct** in your recommendations
+                            # - **Quantify impact** where possible using the available data
+                            # - **Prioritize recommendations** by urgency or business impact
                             
-                            ## Executive Summary
-                            [2-3 sentence overview of the situation]
+                            # **RESPONSE FORMAT**:
                             
-                            ## Key Findings
-                            - [Bullet point 1 with specific data]
-                            - [Bullet point 2 with specific data]
-                            - [Bullet point 3 with specific data]
+                            # ## Executive Summary
+                            # [2-3 sentence overview of the situation]
                             
-                            ## Business Impact
-                            [What these findings mean for operations, costs, risks, or opportunities]
+                            # ## Key Findings
+                            # - [Bullet point 1 with specific data]
+                            # - [Bullet point 2 with specific data]
+                            # - [Bullet point 3 with specific data]
                             
-                            ## Immediate Action Items
-                            1. **Priority 1**: [Most urgent recommendation with timeline]
-                            2. **Priority 2**: [Second priority with expected outcome]
-                            3. **Priority 3**: [Third priority with resource requirements]
+                            # ## Business Impact
+                            # [What these findings mean for operations, costs, risks, or opportunities]
                             
-                            ## Risk Mitigation
-                            [Any immediate risks identified and how to address them]"""
+                            # ## Immediate Action Items
+                            # 1. **Priority 1**: [Most urgent recommendation with timeline]
+                            # 2. **Priority 2**: [Second priority with expected outcome]
+                            # 3. **Priority 3**: [Third priority with resource requirements]
+                            
+                            # ## Risk Mitigation
+                            # [Any immediate risks identified and how to address them]"""
+
+                            ba_summarizer_prompt = f"""You are a business analyst whose role is to provide actionable insights and recommendations based on data analysis.
+                                **YOUR TASK**: Analyze the following data and provide a clear, actionable summary: {combined_response}
+                                **OUTPUT REQUIREMENTS**:
+                                1. **Executive Summary**: Provide a concise overview of key findings.
+                                2. **Key Insights**: Extract the most important data points and what they mean for the business
+                                3. **Actionable Recommendations**: Specific steps the business can take based on the data
+                                4. **Risk Assessment**: Identify any concerning trends or issues that need attention
+                                
+                                **OUTPUT FORMAT**: Complete HTML document with the following specifications:
+                                
+                                **HTML STRUCTURE REQUIREMENTS**:
+                                - Complete HTML5 document with DOCTYPE, head, and body tags
+                                - Responsive design that works on desktop and mobile
+                                - Professional header with "Powered by AWS" small font positioned on the top-left
+                                - Clean, modern footer with contact information
+                                - Main content area with proper sections for each requirement
+                                
+                                **STYLING REQUIREMENTS**:
+                                - Use inline CSS or internal stylesheet (no external dependencies)
+                                - Color scheme: AWS orange (#FF9900) and dark blue (#232F3E) as primary colors
+                                - Clean, professional typography (Arial, Helvetica, or system fonts)
+                                - Proper spacing, margins, and padding for readability
+                                - Card-based layout for different sections
+                                - Responsive grid system for content organization
+                                
+                                **CHART/VISUALIZATION REQUIREMENTS**:
+                                - Include at least 2-3 data visualizations using Chart.js or similar library
+                                - Charts should be: bar charts for comparisons, line charts for trends, pie charts for distributions
+                                - Use CDN links for chart libraries
+                                - Ensure charts are responsive and mobile-friendly
+                                - Include proper labels, legends, and tooltips
+                                
+                                **CONTENT STRUCTURE**:
+                                1. Header with "Powered by AWS" small font and suitable report title based on report content
+                                2. Executive Summary section
+                                3. Key Findings with data visualizations
+                                4. Business Impact analysis
+                                5. Immediate Action Items (prioritized list)
+                                6. Risk Mitigation section
+                                7. Footer with metadata
+                                
+                                **STRICT GUIDELINES**:
+                                - DO NOT ask follow-up questions - work with the data provided
+                                - DO NOT request additional context - analyze what you have
+                                - FOCUS on actionable insights that can be implemented immediately
+                                - Be specific and direct in your recommendations
+                                - Quantify impact where possible using the available data
+                                - Prioritize recommendations by urgency or business impact
+                                - Generate complete, valid HTML that can be saved and opened in any browser
+                                - Include sample data in charts if actual data visualization is not possible from provided data
+                                
+                                **EXAMPLE HTML STRUCTURE**:
+                                <!DOCTYPE html>
+                                <html lang="en">
+                                <head>
+                                    <meta charset="UTF-8">
+                                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                    <title>Business Analysis Report</title>
+                                    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                                    <style>
+                                        /* Your CSS here */
+                                    </style>
+                                </head>
+                                <body>
+                                    <header>
+                                        <img src="aws-logo-url" alt="AWS Logo" class="logo">
+                                        <h1>Business Analysis Report</h1>
+                                    </header>
+                                    
+                                    <main>
+                                        <!-- Your content sections here -->
+                                    </main>
+                                    
+                                    <footer>
+                                        <!-- Footer content -->
+                                    </footer>
+                                    
+                                    <script>
+                                        // Chart initialization code
+                                    </script>
+                                </body>
+                                </html>
+                                Provide ONLY the complete HTML code - no explanatory text before or after."""
+                            
+                            # Generate the HTML report using the custom_summarization_agent
+                            try:
+                                html_report = self.custom_summarization_agent(ba_summarizer_prompt)
+                                html_content = str(html_report)
+
+                                try:
+                                    # Save the report to file using relative path
+                                    # Get the project root directory (3 levels up from current file)
+                                    current_file = pathlib.Path(__file__)
+                                    project_root = current_file.parent.parent.parent
+                                    report_dir = project_root / "generated_reports"
+                                    report_dir.mkdir(exist_ok=True, parents=True)
+                                    
+                                    # Generate a unique filename based on timestamp
+                                    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                                    report_title = "Data_Analysis_Report"
+                                    
+                                    # Extract title from HTML if possible
+                                    if '<title>' in html_content and '</title>' in html_content:
+                                        report_title = html_content.split('<title>')[1].split('</title>')[0].replace(' ', '_')
+                                    
+                                    filename = f"{report_title}_{timestamp}.html"
+                                    filepath = report_dir / filename
+                                    
+                                    # Save the HTML report to file
+                                    with open(filepath, 'w', encoding='utf-8') as f:
+                                        f.write(html_content)
+                                except Exception as e:
+                                    logger.error(f"Error saving generated report {e}")
+
+                                # Send the HTML content to the frontend
+                                await self._stream_update(
+                                    "html_content",
+                                    html_content,
+                                    is_partial=False,
+                                    metadata={
+                                        "generated_at": datetime.now().isoformat(),
+                                        "query": user_query
+                                    },
+                                    title="Data Analysis Report"
+                                )
+                                
+                                # Also provide a text summary for non-HTML clients
+                                await self._stream_update(
+                                    "content",
+                                    "I've analyzed the data and created a detailed HTML report with visualizations. You can view it above.",
+                                    is_partial=False
+                                )
+                                
+                                return {"type": "html_content", "content": html_content}
+                                
+                            except Exception as e:
+                                logger.error(f"Error generating HTML report: {e}")
+                                await self._stream_update(
+                                    "content",
+                                    f"I've analyzed the data but encountered an error generating the HTML report: {str(e)}. Here's a text summary instead:\n\n{combined_response}",
+                                    is_partial=False
+                                )
+                                return {"type": "error", "content": f"Error generating HTML report: {str(e)}"}
                             
                             summarized = self.custom_summarization_agent(ba_summarizer_prompt)
                             await self._stream_update(

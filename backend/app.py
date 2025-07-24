@@ -13,6 +13,7 @@ import logging
 from datetime import datetime
 import sys
 import os
+import pathlib
 
 # Import from reorganized modules
 from database.database_mcp_clients import MCPClientChatbot
@@ -153,8 +154,11 @@ def start_chatbot():
 def serve_dashboard(filename):
     """Serve generated dashboard HTML files."""
     try:
-        dashboard_path = f"/Users/fraseque/Fraser/Playground/mcp-dashboarding/generated_dashboards/{filename}"
-        if os.path.exists(dashboard_path):
+        # Use pathlib for relative path
+        current_file = pathlib.Path(__file__)
+        project_root = current_file.parent.parent
+        dashboard_path = project_root / "generated_dashboards" / filename
+        if dashboard_path.exists():
             with open(dashboard_path, "r", encoding="utf-8") as f:
                 html_content = f.read()
             return html_content, 200, {"Content-Type": "text/html"}
@@ -168,24 +172,23 @@ def serve_dashboard(filename):
 def get_dashboard_history():
     """Get list of all generated dashboards."""
     try:
-        dashboard_dir = (
-            "/Users/fraseque/Fraser/Playground/mcp-dashboarding/generated_dashboards"
-        )
-        if not os.path.exists(dashboard_dir):
+        # Use pathlib for relative path
+        current_file = pathlib.Path(__file__)
+        project_root = current_file.parent.parent
+        dashboard_dir = project_root / "generated_dashboards"
+        if not dashboard_dir.exists():
             return jsonify({"dashboards": []})
 
         dashboards = []
-        for filename in os.listdir(dashboard_dir):
-            if filename.endswith(".html"):
-                file_path = os.path.join(dashboard_dir, filename)
-                stat = os.stat(file_path)
-                dashboards.append(
-                    {
-                        "filename": filename,
-                        "created_at": datetime.fromtimestamp(stat.st_ctime).isoformat(),
-                        "size": stat.st_size,
-                    }
-                )
+        for file_path in dashboard_dir.glob("*.html"):
+            stat = file_path.stat()
+            dashboards.append(
+                {
+                    "filename": file_path.name,
+                    "created_at": datetime.fromtimestamp(stat.st_ctime).isoformat(),
+                    "size": stat.st_size,
+                }
+            )
 
         # Sort by creation date, newest first
         dashboards.sort(key=lambda x: x["created_at"], reverse=True)
@@ -196,51 +199,103 @@ def get_dashboard_history():
         return jsonify({"error": "Failed to get dashboard history"}), 500
 
 
-@app.route("/api/widget/<filename>", methods=["GET"])
-def serve_widget(filename):
-    """Serve generated dashboard HTML files."""
+@app.route("/api/reports/history", methods=["GET"])
+def get_report_history():
+    """Get list of all generated reports."""
     try:
-        dashboard_path = f"/Users/fraseque/Fraser/Playground/mcp-dashboarding/generated_widgets/{filename}"
-        if os.path.exists(dashboard_path):
+        # Use pathlib for relative path
+        current_file = pathlib.Path(__file__)
+        project_root = current_file.parent.parent
+        dashboard_dir = project_root / "generated_reports"
+        if not dashboard_dir.exists():
+            return jsonify({"reports": []})
+
+        dashboards = []
+        for file_path in dashboard_dir.glob("*.html"):
+            stat = file_path.stat()
+            dashboards.append(
+                {
+                    "filename": file_path.name,
+                    "created_at": datetime.fromtimestamp(stat.st_ctime).isoformat(),
+                    "size": stat.st_size,
+                }
+            )
+
+        # Sort by creation date, newest first
+        dashboards.sort(key=lambda x: x["created_at"], reverse=True)
+        return jsonify({"reports": dashboards})
+
+    except Exception as e:
+        logger.error(f"Error getting report history: {e}")
+        return jsonify({"error": "Failed to get report history"}), 500
+
+
+@app.route("/api/report/<filename>", methods=["GET"])
+def serve_report(filename):
+    """Serve generated report HTML files."""
+    try:
+        # Use pathlib for relative path
+        current_file = pathlib.Path(__file__)
+        project_root = current_file.parent.parent
+        dashboard_path = project_root / "generated_reports" / filename
+        if dashboard_path.exists():
             with open(dashboard_path, "r", encoding="utf-8") as f:
                 html_content = f.read()
             return html_content, 200, {"Content-Type": "text/html"}
         else:
-            return jsonify({"error": "Dashboard not found"}), 404
+            return jsonify({"error": "Report not found"}), 404
+    except Exception as e:
+        logger.error(f"Error serving report: {e}")
+        return jsonify({"error": "Failed to serve report"}), 500
+
+
+@app.route("/api/widget/<filename>", methods=["GET"])
+def serve_widget(filename):
+    """Serve generated widget HTML files."""
+    try:
+        # Use pathlib for relative path
+        current_file = pathlib.Path(__file__)
+        project_root = current_file.parent.parent
+        widget_path = project_root / "generated_widgets" / filename
+        if widget_path.exists():
+            with open(widget_path, "r", encoding="utf-8") as f:
+                html_content = f.read()
+            return html_content, 200, {"Content-Type": "text/html"}
+        else:
+            return jsonify({"error": "Widget not found"}), 404
     except Exception as e:
         logger.error(f"Error serving dashboard: {e}")
         return jsonify({"error": "Failed to serve dashboard"}), 500
 
 @app.route("/api/widget/history", methods=["GET"])
 def get_widget_history():
-    """Get list of all generated dashboards."""
+    """Get list of all generated widgets."""
     try:
-        dashboard_dir = (
-            "/Users/fraseque/Fraser/Playground/mcp-dashboarding/generated_widgets"
-        )
-        if not os.path.exists(dashboard_dir):
-            return jsonify({"dashboards": []})
+        # Use pathlib for relative path
+        current_file = pathlib.Path(__file__)
+        project_root = current_file.parent.parent
+        widget_dir = project_root / "generated_widgets"
+        if not widget_dir.exists():
+            return jsonify({"widgets": []})
 
-        dashboards = []
-        for filename in os.listdir(dashboard_dir):
-            if filename.endswith(".html"):
-                file_path = os.path.join(dashboard_dir, filename)
-                stat = os.stat(file_path)
-                dashboards.append(
-                    {
-                        "filename": filename,
-                        "created_at": datetime.fromtimestamp(stat.st_ctime).isoformat(),
-                        "size": stat.st_size,
-                    }
-                )
+        widgets = []
+        for file_path in widget_dir.glob("*.html"):
+            stat = file_path.stat()
+            widgets.append(
+                {
+                    "filename": file_path.name,
+                    "created_at": datetime.fromtimestamp(stat.st_ctime).isoformat(),
+                    "size": stat.st_size,
+                }
+            )
 
         # Sort by creation date, newest first
-        dashboards.sort(key=lambda x: x["created_at"], reverse=True)
-        return jsonify({"dashboards": dashboards})
+        widgets.sort(key=lambda x: x["created_at"], reverse=True)
+        return jsonify({"widgets": widgets, "dashboards": widgets})
 
     except Exception as e:
-        logger.error(f"Error getting dashboard history: {e}")
-        return jsonify({"error": "Failed to get dashboard history"}), 500
+        logger.error(f"Error getting widget history: {e}")
+        return jsonify({"error": "Failed to get widget history"}), 500
 
 
 
@@ -304,7 +359,7 @@ def handle_connect():
 
                 # Create agents for this session
                 try:
-                    chatbot.create_all_agents(user_id="user", session_id=session_id)
+                    chatbot.create_all_agents(user_id=client_session_id, session_id=client_session_id)
                     
                     # Verify that the orchestrator agent was created
                     if not chatbot.orchestrate_agent:
