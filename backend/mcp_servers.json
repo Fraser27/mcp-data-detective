@@ -25,9 +25,9 @@
         "run",
         "@smithery-ai/github",
         "--key",
-        "6216d495-7102-43e5-8c0a-78fa9fd91fad",
+        "<<your-smithery-key-here>>",
         "--profile",
-        "appalling-monkey-qGwv4d"
+        "<<your-smithery-profile-here>>"
       ],
       "agent_type": "GITHUB_MCP_SERVER_AGENT",
       "name": "Github MCP",
