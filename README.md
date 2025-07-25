@@ -4,10 +4,13 @@ This platform serves as a bridge between AI and the data universe.
 <img width="2870" height="1768" alt="image" src="https://github.com/user-attachments/assets/d1dc9145-3c0d-4197-96bc-4d983640eaaf" />
 
 ## Connected MCPs
+<img width="1433" height="898" alt="Screenshot 2025-07-24 at 5 13 45 pm" src="https://github.com/user-attachments/assets/efe4a3a1-5714-461b-a839-6e42edf35ef9" />
+
+## MCP Orchestration
+<img width="1433" height="897" alt="Screenshot 2025-07-25 at 3 13 23 pm" src="https://github.com/user-attachments/assets/e407aae3-9cd2-4a8b-8867-b5ea7353e007" />
 
 
 ## 🏗️ Architecture
-<img width="1433" height="898" alt="Screenshot 2025-07-24 at 5 13 45 pm" src="https://github.com/user-attachments/assets/efe4a3a1-5714-461b-a839-6e42edf35ef9" />
 
 
 The system consists of two independent MCP servers:
