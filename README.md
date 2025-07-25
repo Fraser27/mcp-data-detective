@@ -8,30 +8,61 @@ The system consists of two independent MCP servers:
 
 1. **MySQL MCP Server** (`mysql-mcp-server/`) - Database operations and queries
 2. **OpenSearch MCP Server** (`opensearch-mcp-server/`) - Search and analytics operations
+3. **Github MCP Server** (`https://smithery.ai/server/@smithery-ai/github`) - Search for public github repositories
+4. **Browser MCP Server** (`https://docs.browsermcp.io/setup-server`) - Control your Browser
 
-## 🚀 Quick Start
 
-### Option 1: Start All Services
-```bash
-# Start the entire system
-./start_system.sh
-```
+## 🚀 Configuring MCP Servers
+This application currently demonstrates integration with 4 MCP servers : 
+* MySQL MCP Server (Locally built and deployed with Sample DB)
+* OpenSearch MCP Server (Locally built and deployed with Sample DB)
+* Browser MCP Server (External MCP)
+* Github MCP Server (External via Smithery)
+#### Configurations for these MCP servers can be found in mcp_servers.json in backend folder
 
-### Option 2: Start Individual Services
+
+##  🐳 Docker Deployment for Local MCP servers,
 
 #### MySQL MCP Server
 ```bash
 cd mysql-mcp-server
-python mysql_mcp_server.py
+docker build -t "mysql-mcp-server" 
+docker run -p 8000:8000 -p 3306:3306 mysql-mcp-server
 ```
 
 #### OpenSearch MCP Server
 ```bash
 cd opensearch-mcp-server
-python opensearch_mcp_server.py
+docker build -t "opensearch-mcp-server" .
+docker run -p 8001:8000 -p 9200:9200 opensearch-mcp-server
 ```
 
-## 📊 Monitoring Dashboards
+## ⚡ Quickstart
+
+### Prerequisites
+- Docker and Docker Compose
+- Node.js (v16+)
+- Python (v3.8+)
+
+### Quick Setup
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Fraser27/mcp-data-detective.git
+   cd mcp-data-detective
+   ```
+
+2. **Start the MCP Client frontend and Backend**
+   ```bash
+   chmod +x start_system.sh
+   ./start_system.sh
+   ```
+
+3. **Access the MCP application on port 3000**
+   - Open http://localhost:3000 in your browser
+   - The system will automatically connect to all configured MCP servers
+
+
+## 📊 Frontend MCP Client application
 
 - **Frontend Dashboard**: http://localhost:3000 - Main application dashboard
 
@@ -46,21 +77,6 @@ mcp-dashboarding/
 └── start_system.sh           # System startup script
 ```
 
-## 🐳 Docker Deployment
-
-```bash
-# Build and run all services
-docker-compose -f docker-compose.yml up -d
-```
-
-## 🧪 Testing
-
-### Test MySQL Server
-```bash
-cd mysql-mcp-server
-python -c "from mysql_mcp_server import *; print('MySQL MCP Server ready')"
-```
-
 ## 📝 Configuration
 
 ### Environment Variables
@@ -70,16 +86,6 @@ Each server has its own configuration:
 
 ## 🔧 Troubleshooting
 
-### Common Issues
-
-1. **Port Conflicts**
-   - MySQL MCP Server: 8000
-   - OpenSearch MCP Server: 8002
-
-2. **Connection Issues**
-   - Verify all services are running
-   - Check firewall settings
-   - Review environment variables
 
 ## 📄 License
 
@@ -94,4 +100,4 @@ For issues and questions:
 
 ---
 
-**Happy Monitoring! 🚀**
+**Happy investigating! 🚀**
