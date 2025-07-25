@@ -1,7 +1,7 @@
 # MCP Data Detective System 
 
 This platform serves as a bridge between AI and the data universe.
-<img width="1437" height="822" alt="mcp-app" src="https://github.com/user-attachments/assets/a99b100f-ca8e-4779-acae-28630a92862a" />
+<img width="2870" height="1768" alt="image" src="https://github.com/user-attachments/assets/d1dc9145-3c0d-4197-96bc-4d983640eaaf" />
 
 
 ## 🏗️ Architecture
