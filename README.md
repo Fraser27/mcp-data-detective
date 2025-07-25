@@ -1,6 +1,8 @@
-# MCP Dashboarding System
+# MCP Data Detective System 
 
-A comprehensive system for managing and monitoring MCP (Model Context Protocol) servers.
+This platform serves as a bridge between AI and the data universe.
+<img width="1437" height="822" alt="mcp-app" src="https://github.com/user-attachments/assets/a99b100f-ca8e-4779-acae-28630a92862a" />
+
 
 ## 🏗️ Architecture
 
